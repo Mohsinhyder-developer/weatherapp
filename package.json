@@ -1,0 +1,29 @@
+{
+  "name": "weather-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "vite": "^7.2.4",
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-window": "^7.4.0"
+  },
+  "dependencies": {
+    "@ionic/core": "^8.7.15",
+    "chart.js": "^4.5.1",
+    "firebase": "^12.7.0",
+    "idb": "^8.0.3",
+    "ionicons": "^8.0.13",
+    "leaflet": "^1.9.4",
+    "localforage": "^1.10.0",
+    "suncalc": "^1.9.0"
+  }
+}

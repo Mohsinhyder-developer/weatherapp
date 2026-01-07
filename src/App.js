@@ -63,48 +63,57 @@ class App {
       <div id="app-background"></div>
       
       <ion-page id="main-page">
+        <!-- Minimal Header -->
         <ion-header class="ion-no-border">
           <ion-toolbar>
-             <ion-buttons slot="start">
-               <ion-button id="btn-settings"><ion-icon name="settings-outline"></ion-icon></ion-button>
-             </ion-buttons>
-             <ion-title class="text-center" id="header-location">LOCATING...</ion-title>
-             <ion-buttons slot="end">
-               <ion-button id="btn-search-open"><ion-icon name="search"></ion-icon></ion-button>
-             </ion-buttons>
+            <div class="flex justify-between items-center px-4 pt-4">
+               <button id="btn-settings" class="p-3 rounded-full hover:bg-white/10 transition text-white">
+                  <ion-icon name="settings-outline" class="text-2xl"></ion-icon>
+               </button>
+               
+               <div class="flex flex-col items-center">
+                  <div class="flex items-center gap-2 text-sm font-medium tracking-widest uppercase text-white/60">
+                     <ion-icon name="location-outline"></ion-icon>
+                     Current Location
+                  </div>
+                  <h1 id="header-location" class="text-xl font-bold text-white tracking-wide">LOCATING...</h1>
+               </div>
+
+               <button id="btn-search-open" class="p-3 rounded-full hover:bg-white/10 transition text-white">
+                  <ion-icon name="search" class="text-2xl"></ion-icon>
+               </button>
+            </div>
           </ion-toolbar>
         </ion-header>
 
-        <ion-content>
+        <ion-content class="no-scrollbar">
           <!-- Weather Alerts -->
-          <div id="weather-alerts"></div>
+          <div id="weather-alerts" class="px-4 mb-4"></div>
 
-          <!-- Main Content Container -->
-          <div class="flex flex-col h-full">
+          <!-- Bento Grid Layout -->
+          <div class="bento-grid pb-20 fade-in">
             
-            <!-- Hero Section (Top) -->
-            <div id="hero-weather" class="flex-1 flex flex-col items-center justify-center p-6 text-center relative">
+            <!-- 1. Hero Card (Current Weather) -->
+            <div id="hero-weather" class="bento-card bento-card-hero items-center justify-center text-center">
                <!-- Populate via JS -->
-               <div class="text-xl opacity-70">Loading Weather...</div>
+               <div class="animate-pulse text-white/50">Loading Weather...</div>
             </div>
 
-             <!-- Map Toggle Button -->
-            <div class="px-6 mb-4 flex justify-end">
-                <button id="btn-toggle-map" class="p-3 rounded-full bg-slate-800/40 backdrop-blur-md text-white border border-white/20 hover:bg-slate-700/50 transition shadow-lg">
-                    <ion-icon name="map-outline" class="text-xl"></ion-icon>
+            <!-- 2. Map Card -->
+            <div class="bento-card bento-card-wide p-0 relative group">
+                <div id="weather-map" class="w-full h-full opacity-80 group-hover:opacity-100 transition duration-500"></div>
+                <div class="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-white">
+                   Precipitation Map
+                </div>
+                <button id="btn-toggle-map" class="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition">
+                    <ion-icon name="expand-outline"></ion-icon>
                 </button>
             </div>
 
-            <!-- Map Container (Hidden by default) -->
-            <div id="map-container" class="hidden w-full h-[350px] mb-6 transition-all duration-300 px-6">
-                <div id="weather-map" class="w-full h-full rounded-2xl shadow-inner border border-white/10 overflow-hidden"></div>
-            </div>
-
-            <!-- Details Panel (Bottom) -->
-            <div class="glass-panel p-6 pb-20 overflow-y-auto no-scrollbar" style="max-height: 60vh;">
-               <div id="weather-details-content">
-                  <!-- Populate via JS -->
-               </div>
+            <!-- 3. Details Cards (Injected via JS into this container or separate) -->
+            <!-- We will inject specific bento items here -->
+            <div id="weather-details-grid" class="contents">
+                <!-- JS will append hourly, daily, and metric cards here -->
             </div>
 
           </div>
@@ -163,89 +172,139 @@ class App {
 
   getSettingsPageHTML() {
     return `
-      <div id="settings-page" class="fixed inset-0 z-50 bg-slate-900 translate-x-full flex flex-col transition-transform duration-300">
-        <!-- Header -->
-        <div class="p-4 pt-12 bg-slate-800/50 backdrop-blur-md border-b border-white/10 flex items-center justify-between">
-           <h2 class="text-xl font-bold text-white">Settings</h2>
-           <button id="btn-close-settings" class="p-2 -mr-2 text-slate-400 hover:text-white transition bg-transparent border-0">
-              <span class="text-sm font-bold uppercase tracking-wide">Done</span>
-           </button>
-        </div>
+      <div id="settings-page" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+         <!-- Backdrop -->
+         <div id="settings-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-        <!-- Content -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-8">
+         <!-- Content -->
+         <div class="relative w-full max-w-md bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl transform scale-95 transition-all duration-300 overflow-hidden flex flex-col max-h-[85vh] m-4">
             
-            <!-- Units Section -->
-            <div class="space-y-4">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Display</h3>
-                <div class="premium-glass p-1 rounded-2xl flex relative bg-slate-800/50">
-                     <div class="w-1/2 h-full absolute top-0 left-0 bg-blue-600 rounded-xl transition-all duration-300 opacity-20" id="unit-indicator"></div>
-                     <button class="flex-1 py-3 text-center z-10 font-medium text-white transition rounded-xl relative overflow-hidden group" id="btn-metric">
-                        Metric (°C)
-                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition"></div>
-                     </button>
-                     <button class="flex-1 py-3 text-center z-10 font-medium text-slate-400 transition rounded-xl relative overflow-hidden group" id="btn-imperial">
-                        Imperial (°F)
-                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition"></div>
-                     </button>
-                </div>
-
-                <div class="premium-glass p-4 rounded-2xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-purple-500/20 text-purple-300">
-                           <ion-icon name="color-palette"></ion-icon>
-                        </div>
-                        <span class="font-medium text-white">Dynamic Backgrounds</span>
-                    </div>
-                     <ion-toggle id="toggle-dynamic-bg" checked></ion-toggle>
-                </div>
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+               <h2 class="text-xl font-bold text-white tracking-wide">Settings</h2>
+               <button id="btn-close-settings" class="p-2 hover:bg-white/10 rounded-full transition text-slate-400">
+                  <ion-icon name="close-outline" class="text-xl"></ion-icon>
+               </button>
             </div>
 
-            <!-- Notifications Section -->
-             <div class="space-y-4">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Notifications</h3>
-                <div class="premium-glass p-4 rounded-2xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-orange-500/20 text-orange-300">
-                           <ion-icon name="notifications"></ion-icon>
-                        </div>
-                        <span class="font-medium text-white">Severe Weather Alerts</span>
-                    </div>
-                     <ion-toggle id="toggle-notifications" checked></ion-toggle>
+            <div class="flex-1 overflow-y-auto p-6 space-y-8 no-scrollbar">
+                <!-- Units -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Units</h3>
+                    <ion-segment value="${this.preferences.units}" id="unit-segment">
+                       <ion-segment-button value="metric">
+                          <ion-label>Metric (°C)</ion-label>
+                       </ion-segment-button>
+                       <ion-segment-button value="imperial">
+                          <ion-label>Imperial (°F)</ion-label>
+                       </ion-segment-button>
+                    </ion-segment>
                 </div>
-            </div>
 
-             <!-- Data Section -->
-            <div class="space-y-4">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Data & Storage</h3>
-                 <button id="btn-clear-cache" class="w-full premium-glass p-4 rounded-2xl flex items-center justify-between group hover:bg-red-500/10 transition border-red-500/20 border">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-red-500/20 text-red-400">
-                           <ion-icon name="trash"></ion-icon>
+                <!-- Theme -->
+                <div class="space-y-3">
+                   <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Theme</h3>
+                   <ion-segment value="${this.preferences.theme}" id="theme-segment">
+                       <ion-segment-button value="light">
+                          <ion-label>Light</ion-label>
+                       </ion-segment-button>
+                       <ion-segment-button value="dark">
+                          <ion-label>Dark</ion-label>
+                       </ion-segment-button>
+                   </ion-segment>
+                </div>
+
+                <!-- Toggles -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-purple-500/20 text-purple-300"><ion-icon name="color-palette"></ion-icon></div>
+                            <span class="font-medium text-white">Dynamic Backgrounds</span>
                         </div>
-                        <span class="font-medium text-red-300 group-hover:text-red-200">Clear Cache & Reset</span>
+                        <ion-toggle id="toggle-dynamic-bg" checked></ion-toggle>
                     </div>
-                    <ion-icon name="chevron-forward" class="text-slate-600"></ion-icon>
+
+                    <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-orange-500/20 text-orange-300"><ion-icon name="notifications"></ion-icon></div>
+                            <span class="font-medium text-white">Alerts</span>
+                        </div>
+                        <ion-toggle id="toggle-notifications" checked></ion-toggle>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <button id="btn-clear-cache" class="w-full p-4 flex items-center justify-between bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-2xl transition group">
+                     <span class="font-medium text-red-400">Reset App Data</span>
+                     <ion-icon name="trash" class="text-red-400 items-center justify-center"></ion-icon>
                 </button>
+
+                <div class="pt-4 text-center">
+                    <img src="/logo.png" class="w-16 h-16 mx-auto mb-2 opacity-80" />
+                    <div class="text-xs text-slate-500">Weather App Pro v2.0</div>
+                </div>
             </div>
 
-            <!-- About Section -->
-            <div class="pt-8 text-center">
-                 <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <ion-icon name="cloudy-night" class="text-3xl text-white"></ion-icon>
-                 </div>
-                 <h4 class="text-lg font-bold text-white mb-1">Weather App Pro</h4>
-                 <div class="text-slate-500 text-sm">Version 2.0.0</div>
-                 <div class="text-slate-600 text-xs mt-4">Designed with ❤️ using Ionic & Tailwind</div>
-            </div>
-
-        </div>
+         </div>
       </div>
     `;
   }
 
   getModalsHTML() {
     return ``;
+  }
+
+
+  getAuthHTML() {
+    return `
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1475116127127-e1675a805094?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center">
+         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+         
+         <div class="relative w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl mx-4 transform transition-all animate-enter">
+            
+            <div class="text-center mb-8">
+               <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <ion-icon name="cloudy-night" class="text-3xl text-white"></ion-icon>
+               </div>
+               <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
+               <p class="text-slate-300">Sign in to sync your favorites</p>
+            </div>
+
+            <div class="space-y-4">
+               <div class="relative">
+                  <ion-icon name="mail-outline" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></ion-icon>
+                  <input type="email" id="auth-email" placeholder="Email Address" 
+                         class="w-full bg-slate-800/50 text-white placeholder-slate-500 px-10 py-4 rounded-xl border border-white/10 focus:border-blue-400 focus:bg-slate-800/80 outline-none transition">
+               </div>
+
+               <div class="relative">
+                  <ion-icon name="lock-closed-outline" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></ion-icon>
+                  <input type="password" id="auth-password" placeholder="Password" 
+                         class="w-full bg-slate-800/50 text-white placeholder-slate-500 px-10 py-4 rounded-xl border border-white/10 focus:border-blue-400 focus:bg-slate-800/80 outline-none transition">
+               </div>
+
+               <button id="btn-signin" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 transition transform hover:scale-[1.02] active:scale-95">
+                  Sign In
+               </button>
+
+               <div class="relative py-2">
+                  <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
+                  <div class="relative flex justify-center text-xs uppercase"><span class="bg-transparent px-2 text-slate-400 backdrop-blur-xl">Or continue with</span></div>
+               </div>
+
+               <button id="btn-google" class="w-full bg-white text-slate-900 font-bold py-3 rounded-xl hover:bg-slate-100 transition flex items-center justify-center gap-2">
+                  <ion-icon name="logo-google" class="text-xl"></ion-icon>
+                  Google
+               </button>
+            </div>
+
+            <div id="auth-error" class="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-sm hidden text-center"></div>
+
+            <p class="text-center mt-6 text-sm text-slate-400">
+               Don't have an account? <button id="btn-signup" class="text-blue-400 hover:text-blue-300 font-medium hover:underline">Sign Up</button>
+            </p>
+         </div>
+      </div>
+    `;
   }
 
   // --- LISTENERS ---
@@ -283,38 +342,39 @@ class App {
 
     // OPEN Search Page
     document.getElementById('btn-search-open')?.addEventListener('click', () => {
-      searchPage.classList.remove('translate-x-full');
-      searchPage.classList.add('translate-x-0');
-      setTimeout(() => searchInput.focus(), 300);
-      this.renderFavoritesList(); // Refresh favorites when opening
+      searchPage.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => searchInput.focus(), 100);
+      this.renderFavoritesList();
     });
 
+    const closeSearch = () => {
+      searchPage.classList.add('opacity-0', 'pointer-events-none');
+    };
+
     // CLOSE Search Page
-    document.getElementById('btn-close-search')?.addEventListener('click', () => {
-      searchPage.classList.remove('translate-x-0');
-      searchPage.classList.add('translate-x-full');
-    });
+    document.getElementById('btn-close-search')?.addEventListener('click', closeSearch);
+    document.getElementById('search-backdrop')?.addEventListener('click', closeSearch);
 
     // Use Current Location
     document.getElementById('btn-use-location')?.addEventListener('click', async () => {
-      searchPage.classList.remove('translate-x-0');
-      searchPage.classList.add('translate-x-full');
+      closeSearch();
       await this.loadWeather(true);
     });
 
     // OPEN Settings Page
     document.getElementById('btn-settings')?.addEventListener('click', () => {
       const settingsPage = document.getElementById('settings-page');
-      settingsPage.classList.remove('translate-x-full');
-      settingsPage.classList.add('translate-x-0');
+      settingsPage.classList.remove('opacity-0', 'pointer-events-none');
     });
 
-    // CLOSE Settings Page
-    document.getElementById('btn-close-settings')?.addEventListener('click', () => {
+    const closeSettings = () => {
       const settingsPage = document.getElementById('settings-page');
-      settingsPage.classList.remove('translate-x-0');
-      settingsPage.classList.add('translate-x-full');
-    });
+      settingsPage.classList.add('opacity-0', 'pointer-events-none');
+    };
+
+    // CLOSE Settings Page
+    document.getElementById('btn-close-settings')?.addEventListener('click', closeSettings);
+    document.getElementById('settings-backdrop')?.addEventListener('click', closeSettings);
 
     // Dynamic Background Toggle
     document.getElementById('toggle-dynamic-bg')?.addEventListener('ionChange', (e) => {
@@ -624,142 +684,121 @@ data-lat="${city.lat}" data-lon="${city.lon}">
     const hero = document.getElementById('hero-weather');
     if (hero) {
       hero.innerHTML = `
-  <div class="absolute top-0 right-0 p-4 fade-in" style="animation-delay: 0.1s">
-    <button id="btn-favorite" class="text-3xl text-white/80 hover:text-white transition-colors">
-      <ion-icon name="heart-outline"></ion-icon>
-    </button>
-           </div>
-           
-           <div class="mb-4 text-xs font-bold uppercase tracking-widest text-white/70 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full inline-block fade-in">
-                ${formatters.formatShortDay(new Date())} • ${formatters.formatTime(new Date())}
+           <div class="flex flex-col items-center z-10 animate-enter">
+             <div class="mb-2 text-sm font-bold uppercase tracking-[0.2em] text-blue-200">
+                  ${formatters.formatShortDay(new Date())} • ${formatters.formatTime(new Date())}
+             </div>
+             
+             <div class="relative">
+               <img src="${weatherService.getIconUrl(current.icon)}" 
+                    class="w-40 h-40 drop-shadow-2xl animate-float" 
+                    onerror="this.src='https://openweathermap.org/img/wn/02d@4x.png'" />
+             </div>
+             
+             <div class="text-xxl text-gradient -mt-4">${Math.round(current.temp)}°</div>
+             <div class="text-2xl font-medium text-white/90 capitalize tracking-wide -mt-2 mb-6">${current.description}</div>
+             
+             <div class="flex gap-12 text-lg font-medium text-white/80">
+                <span class="flex items-center gap-2"><ion-icon name="arrow-up" class="text-red-400"></ion-icon> ${Math.round(current.tempMax)}°</span>
+                <span class="flex items-center gap-2"><ion-icon name="arrow-down" class="text-cyan-400"></ion-icon> ${Math.round(current.tempMin)}°</span>
+             </div>
            </div>
 
-           <div class="relative fade-in" style="animation-delay: 0.2s">
-             <img src="${weatherService.getIconUrl(current.icon)}" 
-                  class="w-48 h-48 drop-shadow-2xl animate-float mx-auto" 
-                  onerror="this.src='https://openweathermap.org/img/wn/02d@4x.png'" />
-           </div>
-           
-           <div class="hero-text mt-[-1rem] fade-in" style="animation-delay: 0.3s">${Math.round(current.temp)}°</div>
-           <div class="hero-condition fade-in" style="animation-delay: 0.4s">${current.description}</div>
-           
-           <div class="flex gap-8 text-lg font-medium text-white/90 fade-in" style="animation-delay: 0.5s">
-              <span class="flex items-center gap-1"><ion-icon name="arrow-up" class="text-red-300"></ion-icon> ${Math.round(current.tempMax)}°</span>
-              <span class="flex items-center gap-1"><ion-icon name="arrow-down" class="text-indigo-300"></ion-icon> ${Math.round(current.tempMin)}°</span>
-           </div>
-           
-           <button id="btn-refresh-loc" class="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/60 hover:text-white bg-white/5 hover:bg-white/10 px-6 py-3 rounded-2xl transition border border-white/10 fade-in" style="animation-delay: 0.6s">
-              <ion-icon name="locate"></ion-icon> Update Location
+           <button id="btn-favorite" class="absolute top-6 right-6 text-2xl text-white/50 hover:text-red-500 transition-colors z-20">
+              <ion-icon name="heart-outline"></ion-icon>
            </button>
-`;
+      `;
 
       const favBtn = document.getElementById('btn-favorite');
       if (favBtn) favBtn.addEventListener('click', () => this.toggleFavorite());
-
-      const refreshBtn = document.getElementById('btn-refresh-loc');
-      if (refreshBtn) refreshBtn.addEventListener('click', () => this.loadWeather(true));
-
       this.updateFavoriteButtonState();
       this.updateDynamicBackground(current.weather, current.icon);
     }
 
-    // Update Details
-    const details = document.getElementById('weather-details-content');
-    if (details) {
-      details.innerHTML = `
-  <!--Hourly -->
-           <div class="premium-glass p-5 mb-5 fade-in" style="animation-delay: 0.7s">
-              <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Hourly Forecast</h3>
-              <div class="flex gap-6 overflow-x-auto pb-2 no-scrollbar">
-                 ${(hourly || []).map(h => `
-                    <div class="flex flex-col items-center min-w-[64px] group">
-                       <span class="text-sm text-slate-300 mb-1">${formatters.formatTime(h.time)}</span>
-                       <img src="${weatherService.getIconUrl(h.icon)}" class="w-10 h-10 mb-1 group-hover:scale-110 transition-transform">
-                       <span class="font-bold text-lg mb-1">${Math.round(h.temp)}°</span>
-                       <span class="text-[10px] text-blue-200 flex items-center gap-0.5 bg-blue-500/20 px-1.5 py-0.5 rounded">
-                           <ion-icon name="water"></ion-icon> ${Math.round(h.pop * 100)}%
-                       </span>
-                    </div>
-                 `).join('')}
-              </div>
+    // Update Details Grid
+    const detailsGrid = document.getElementById('weather-details-grid');
+    if (detailsGrid) {
+      detailsGrid.innerHTML = `
+        <!-- Hourly Forecast (Wide) -->
+        <div class="bento-card bento-card-wide overflow-hidden animate-enter delay-100">
+           <div class="flex items-center gap-2 mb-4 text-sm font-bold text-white/60 uppercase tracking-widest">
+              <ion-icon name="time-outline"></ion-icon> Hourly Forecast
            </div>
-
-           <!--7 - Day List-->
-           <div class="premium-glass p-5 mb-5 fade-in" style="animation-delay: 0.8s">
-              <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4 border-b border-white/10 pb-2">7-Day Forecast</h3>
-              <div class="space-y-4">
-                 ${(daily || []).map(d => `
-                    <div class="flex items-center justify-between hover:bg-white/5 p-2 -mx-2 rounded-xl transition">
-                       <span class="w-20 font-medium text-slate-200">${formatters.formatShortDay(d.date)}</span>
-                       <div class="flex-1 flex justify-center items-center gap-2">
-                            <img src="${weatherService.getIconUrl(d.icon)}" class="w-8 h-8">
-                            <span class="text-sm text-slate-400 capitalize hidden sm:block">${d.description}</span>
-                       </div>
-                       <div class="w-28 text-right flex justify-end gap-4">
-                          <span class="text-slate-400 font-medium">${Math.round(d.tempMin)}°</span>
-                          <span class="font-bold text-white text-lg">${Math.round(d.tempMax)}°</span>
-                       </div>
-                    </div>
-                 `).join('')}
-              </div>
+           <div class="flex gap-8 overflow-x-auto pb-4 no-scrollbar fade-mask-r">
+              ${(hourly || []).map(h => `
+                 <div class="flex flex-col items-center min-w-[4rem] group cursor-pointer hover:-translate-y-1 transition-transform duration-300">
+                    <span class="text-xs text-white/70 mb-2">${formatters.formatTime(h.time)}</span>
+                    <img src="${weatherService.getIconUrl(h.icon)}" class="w-8 h-8 mb-2 opacity-90 group-hover:opacity-100 group-hover:scale-110 transition">
+                    <span class="font-bold text-lg">${Math.round(h.temp)}°</span>
+                 </div>
+              `).join('')}
            </div>
+        </div>
 
-           <!--Metrics Grid-->
-  <div class="grid grid-cols-2 gap-4 mb-5 fade-in" style="animation-delay: 0.9s">
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="speedometer-outline"></ion-icon> Wind
-      </div>
-      <div class="text-2xl font-bold">${current.windSpeed} <span class="text-base font-normal text-slate-300">km/h</span></div>
-    </div>
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="water-outline"></ion-icon> Humidity
-      </div>
-      <div class="text-2xl font-bold">${current.humidity}<span class="text-base font-normal">%</span></div>
-    </div>
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="thermometer-outline"></ion-icon> Feels Like
-      </div>
-      <div class="text-2xl font-bold">${Math.round(current.feelsLike)}°</div>
-    </div>
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="eye-outline"></ion-icon> Visibility
-      </div>
-      <div class="text-2xl font-bold">${(current.visibility / 1000).toFixed(1)} <span class="text-base font-normal text-slate-300">km</span></div>
-    </div>
+        <!-- 7-Day Forecast (Tall) -->
+        <div class="bento-card bento-card-tall animate-enter delay-200">
+           <div class="flex items-center gap-2 mb-4 text-sm font-bold text-white/60 uppercase tracking-widest">
+              <ion-icon name="calendar-outline"></ion-icon> 7-Day
+           </div>
+           <div class="space-y-3 overflow-y-auto no-scrollbar pr-2 h-full">
+              ${(daily || []).map(d => `
+                 <div class="flex items-center justify-between hover:bg-white/5 p-2 rounded-xl transition group">
+                    <span class="w-12 font-medium text-white/80 group-hover:text-white">${formatters.formatShortDay(d.date)}</span>
+                    <div class="flex items-center gap-2 opacity-80 group-hover:opacity-100">
+                         <img src="${weatherService.getIconUrl(d.icon)}" class="w-6 h-6">
+                    </div>
+                    <div class="flex gap-3 text-sm">
+                       <span class="text-white/40">${Math.round(d.tempMin)}°</span>
+                       <span class="font-bold text-white">${Math.round(d.tempMax)}°</span>
+                    </div>
+                 </div>
+              `).join('')}
+           </div>
+        </div>
 
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="sunny-outline"></ion-icon> UV Index
-      </div>
-      <div class="text-2xl font-bold">${uv !== null ? uv : '--'}</div>
-      <div class="text-xs text-slate-400">${uv > 5 ? 'High' : (uv > 2 ? 'Moderate' : 'Low')}</div>
-    </div>
+        <!-- Metrics Cards -->
+        <div class="bento-card animate-enter delay-300">
+           <div class="text-xs text-white/50 uppercase tracking-wider mb-2 flex items-center gap-1"><ion-icon name="speedometer-outline"></ion-icon> Wind</div>
+           <div class="text-2xl font-bold">${current.windSpeed} <span class="text-sm font-normal text-white/60">km/h</span></div>
+           <div class="mt-auto h-1 w-full bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-blue-400" style="width: ${Math.min(current.windSpeed * 2, 100)}%"></div>
+           </div>
+        </div>
 
-    <div class="premium-glass p-4 flex flex-col justify-between h-28">
-      <div class="text-xs text-slate-400 uppercase tracking-wide flex items-center gap-2">
-        <ion-icon name="flower-outline"></ion-icon> AQI
-      </div>
-      <div class="text-xl font-bold truncate">${airQuality ? airQuality.aqiDescription : '--'}</div>
-      <div class="text-xs text-slate-400">Index: ${airQuality ? airQuality.aqi : '--'}</div>
-    </div>
+        <div class="bento-card animate-enter delay-300">
+           <div class="text-xs text-white/50 uppercase tracking-wider mb-2 flex items-center gap-1"><ion-icon name="water-outline"></ion-icon> Humidity</div>
+           <div class="text-2xl font-bold">${current.humidity}<span class="text-sm font-normal text-white/60">%</span></div>
+           <div class="mt-auto h-1 w-full bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-cyan-400" style="width: ${current.humidity}%"></div>
+           </div>
+        </div>
 
-    <div class="premium-glass col-span-2 p-6 flex justify-between items-center">
-      <div class="text-center">
-        <div class="text-[10px] text-slate-400 uppercase mb-2 tracking-wider">Sunrise</div>
-        <div class="text-2xl font-bold text-amber-300">${formatters.formatTime(current.sunrise)}</div>
-      </div>
-      <div class="h-8 w-px bg-white/10"></div>
-      <div class="text-center">
-        <div class="text-[10px] text-slate-400 uppercase mb-2 tracking-wider">Sunset</div>
-        <div class="text-2xl font-bold text-orange-300">${formatters.formatTime(current.sunset)}</div>
-      </div>
-    </div>
-  </div>
-`;
+        <div class="bento-card animate-enter delay-300">
+           <div class="text-xs text-white/50 uppercase tracking-wider mb-2 flex items-center gap-1"><ion-icon name="sunny-outline"></ion-icon> UV Index</div>
+           <div class="text-2xl font-bold">${uv !== null ? uv : '--'}</div>
+           <div class="text-xs ${uv > 5 ? 'text-red-400' : 'text-green-400'} font-bold mt-1">${uv > 5 ? 'High' : (uv > 2 ? 'Moderate' : 'Low')}</div>
+        </div>
+
+        <div class="bento-card animate-enter delay-300">
+           <div class="text-xs text-white/50 uppercase tracking-wider mb-2 flex items-center gap-1"><ion-icon name="eye-outline"></ion-icon> Visibility</div>
+           <div class="text-xl font-bold">${(current.visibility / 1000).toFixed(1)} <span class="text-sm font-normal text-white/60">km</span></div>
+        </div>
+
+        <!-- Astro Card (Wide) -->
+        <div class="bento-card bento-card-wide flex-row items-center justify-around animate-enter delay-300">
+           <div class="text-center">
+              <ion-icon name="sunny" class="text-3xl text-amber-400 mb-2"></ion-icon>
+              <div class="text-xs text-white/50 uppercase tracking-wider">Sunrise</div>
+              <div class="text-xl font-bold text-white">${formatters.formatTime(current.sunrise)}</div>
+           </div>
+           <div class="h-10 w-px bg-white/10"></div>
+           <div class="text-center">
+              <ion-icon name="moon" class="text-3xl text-indigo-400 mb-2"></ion-icon>
+              <div class="text-xs text-white/50 uppercase tracking-wider">Sunset</div>
+              <div class="text-xl font-bold text-white">${formatters.formatTime(current.sunset)}</div>
+           </div>
+        </div>
+      `;
     }
   }
 
@@ -778,15 +817,13 @@ data-lat="${city.lat}" data-lon="${city.lon}">
     else if (cond.includes('snow')) appBg.classList.add('bg-snow');
     else if (cond.includes('mist') || cond.includes('fog') || cond.includes('haze')) appBg.classList.add('bg-mist');
     else if (cond.includes('cloud')) {
-      // Distinguish broken clouds vs scattered
       appBg.classList.add('bg-clouds');
     }
     else if (cond.includes('clear')) {
       appBg.classList.add(isNight ? 'bg-clear-night' : 'bg-clear-day');
     }
     else {
-      // Fallback
-      appBg.classList.add('bg-clear-night');
+      appBg.classList.add(isNight ? 'bg-clear-night' : 'bg-clear-day');
     }
   }
 

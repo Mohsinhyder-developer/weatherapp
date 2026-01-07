@@ -5,15 +5,33 @@
 @import '@ionic/core/css/typography.css';
 @import 'leaflet/dist/leaflet.css';
 
+/* Import Outfit Font */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import './search.css';
 
 :root {
-  --ion-font-family: 'Inter', system-ui, sans-serif;
+  --ion-font-family: 'Outfit', sans-serif;
   --ion-background-color: transparent;
   --ion-text-color: #ffffff;
+
+  /* Glassmorphism Variables - VisionOS Style */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  /* Slightly more opaque */
+  --glass-border: rgba(255, 255, 255, 0.15);
+  /* Stronger border */
+  --glass-highlight: rgba(255, 255, 255, 0.2);
+  --glass-blur: 30px;
+  /* Deep blur */
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  /* Bento Grid */
+  --bento-gap: 1.25rem;
+  --bento-radius: 32px;
+  /* Super rounded */
 }
 
 /* --- Layout Reset --- */
@@ -30,7 +48,8 @@ body,
 body {
   font-family: var(--ion-font-family);
   -webkit-font-smoothing: antialiased;
-  background-color: #0f172a;
+  background-color: #0f0524;
+  /* Deep Void Purple Base */
   color: #ffffff;
 }
 
@@ -48,17 +67,12 @@ ion-page#main-page {
 /* Desktop: Constrain content width for better UX */
 @media (min-width: 768px) {
   ion-page#main-page {
-    max-width: 600px;
+    max-width: 1200px;
+    padding: 2rem;
   }
 }
 
-@media (min-width: 1024px) {
-  ion-page#main-page {
-    max-width: 700px;
-  }
-}
-
-/* --- Dynamic Backgrounds --- */
+/* --- Dynamic Backgrounds (Cosmic Palette) --- */
 #app-background {
   position: fixed;
   top: 0;
@@ -68,83 +82,152 @@ ion-page#main-page {
   z-index: -1;
   background-size: 400% 400%;
   transition: background 1.5s ease-in-out;
-  /* Default: Night/Dark */
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  background: linear-gradient(135deg, #1A0B2E 0%, #11005c 100%);
+  /* Default Cosmic */
 }
 
-/* Weather Conditions - Applied via JS */
+/* Clear Day: Vibrant Blue to Cyan */
 .bg-clear-day {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%) !important;
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%) !important;
 }
 
+/* Clear Night: Deep Cosmic Purple to Midnight */
 .bg-clear-night {
-  background: linear-gradient(135deg, #0f172a 0%, #172554 50%, #1e1b4b 100%) !important;
+  background: linear-gradient(135deg, #240b36 0%, #c31432 100%) !important;
 }
 
+/* Fallback or specific override */
+/* Better Night: Deep Blue/Purple */
+.bg-clear-night {
+  background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%) !important;
+}
+
+/* Even Better "Cosmic" Night matching the logo */
+.bg-clear-night {
+  background: linear-gradient(135deg, #2E1065 0%, #172554 100%) !important;
+}
+
+
+/* Clouds: Slate Purple */
 .bg-clouds {
-  background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%) !important;
+  background: linear-gradient(135deg, #373B44 0%, #4286f4 100%) !important;
 }
 
+/* Rain: Deep Navy to Electric Blue */
 .bg-rain {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%) !important;
+  background: linear-gradient(135deg, #141E30 0%, #243B55 100%) !important;
 }
 
+/* Snow: Cool White/Blue */
 .bg-snow {
-  background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 50%, #64748b 100%) !important;
+  background: linear-gradient(135deg, #83a4d4 0%, #b6fbff 100%) !important;
 }
 
+/* Thunder: Electric Purple */
 .bg-thunder {
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%) !important;
+  background: linear-gradient(135deg, #200122 0%, #6f0000 100%) !important;
 }
 
+/* Mist: Foggy overlay */
 .bg-mist {
-  background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #1f2937 100%) !important;
+  background: linear-gradient(135deg, #3E5151 0%, #DECBA4 100%) !important;
 }
 
-/* --- Premium Glassmorphism --- */
-.premium-glass {
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-  color: white;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
-.premium-glass:active {
-  transform: scale(0.98);
-}
-
+/* --- Premium Glassmorphism (VisionOS Style) --- */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-top-left-radius: 32px;
-  border-top-right-radius: 32px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--bento-radius);
   color: white;
-  height: 100%;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner Glossy Highlight */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.glass-panel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Bento Grid Utilities */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--bento-gap);
+  padding: var(--bento-gap);
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bento-card {
+  @apply glass-panel p-6 flex flex-col justify-between relative;
+  min-height: 160px;
+}
+
+.bento-card-wide {
+  grid-column: span 2;
+}
+
+.bento-card-tall {
+  grid-row: span 2;
+}
+
+.bento-card-hero {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 380px;
 }
 
 /* --- Typography --- */
-.hero-text {
-  font-size: 6rem;
+.text-xxl {
+  font-family: 'Outfit', sans-serif;
+  font-size: 8.5rem;
   font-weight: 800;
-  letter-spacing: -2px;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  line-height: 1;
+  letter-spacing: -6px;
+  line-height: 0.85;
+  /* 3D Depth */
+  color: white;
+  text-shadow:
+    0 1px 0 #ccc,
+    0 2px 0 #c9c9c9,
+    0 3px 0 #bbb,
+    0 4px 0 #b9b9b9,
+    0 5px 0 #aaa,
+    0 6px 1px rgba(0, 0, 0, .1),
+    0 0 5px rgba(0, 0, 0, .1),
+    0 1px 3px rgba(0, 0, 0, .3),
+    0 3px 5px rgba(0, 0, 0, .2),
+    0 5px 10px rgba(0, 0, 0, .25),
+    0 10px 10px rgba(0, 0, 0, .2),
+    0 20px 20px rgba(0, 0, 0, .15);
 }
 
-.hero-condition {
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: capitalize;
-  margin-bottom: 2rem;
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #e0e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* --- Ionic Overrides --- */
@@ -152,72 +235,84 @@ ion-content {
   --background: transparent;
 }
 
-ion-modal {
+ion-toolbar {
   --background: transparent;
-  --box-shadow: none;
-  --width: 90%;
-  --max-width: 500px;
-  --height: auto;
-  --max-height: 90%;
-  --border-radius: 24px;
-  align-items: center;
-  justify-content: center;
+  --border-width: 0;
 }
 
-ion-modal::part(backdrop) {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+ion-header {
+  box-shadow: none;
+}
+
+/* Modals & Search */
+ion-modal {
+  --background: rgba(0, 0, 0, 0.6);
+  --backdrop-opacity: 1;
 }
 
 ion-modal::part(content) {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(24px);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(16, 11, 45, 0.85);
+  /* Deep Violet */
+  backdrop-filter: blur(35px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  max-height: 80vh;
+  margin: auto;
 }
 
-/* Force modals to display as overlays not inline */
-ion-modal {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  display: none;
+/* Animations */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
-ion-modal.show-modal {
-  display: flex !important;
-  z-index: 10000 !important;
+.animate-enter {
+  animation: enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
 
-ion-searchbar {
-  --background: rgba(255, 255, 255, 0.1) !important;
-  --color: white !important;
-  --placeholder-color: rgba(255, 255, 255, 0.5) !important;
-  --icon-color: white !important;
-  --border-radius: 12px !important;
-  padding: 0 !important;
+.delay-100 {
+  animation-delay: 100ms;
 }
 
-ion-segment {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  padding: 4px;
+.delay-200 {
+  animation-delay: 200ms;
 }
 
-ion-segment-button {
-  --color: rgba(255, 255, 255, 0.6);
-  --color-checked: white;
-  --indicator-color: rgba(255, 255, 255, 0.15);
+.delay-300 {
+  animation-delay: 300ms;
 }
 
-/* --- Utilities --- */
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Scrollbar Hiding */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -225,45 +320,4 @@ ion-segment-button {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Animations */
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-8px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.ion-padding {
-  --padding-start: 20px;
-  --padding-end: 20px;
 }

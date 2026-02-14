@@ -13,6 +13,7 @@ import { defineCustomElement as defineIonModal } from '@ionic/core/components/io
 import { defineCustomElement as defineIonSegment } from '@ionic/core/components/ion-segment.js';
 import { defineCustomElement as defineIonSegmentButton } from '@ionic/core/components/ion-segment-button.js';
 import { defineCustomElement as defineIonLabel } from '@ionic/core/components/ion-label.js';
+import { defineCustomElement as defineIonToggle } from '@ionic/core/components/ion-toggle.js';
 
 // Icons
 import { addIcons } from 'ionicons';
@@ -63,6 +64,7 @@ defineIonModal();
 defineIonSegment();
 defineIonSegmentButton();
 defineIonLabel();
+defineIonToggle();
 
 // Register Icons Globally
 addIcons({

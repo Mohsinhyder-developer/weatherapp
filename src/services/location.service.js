@@ -6,8 +6,10 @@ class LocationService {
 
     /**
      * Get user's current location using GPS
+     * @param {Object} options - { maximumAge: 0 } for fresh position, default 5 min cache
      */
-    async getCurrentLocation() {
+    async getCurrentLocation(options = {}) {
+        const { maximumAge = 300000 } = options;
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) {
                 reject(new Error('Geolocation is not supported by your browser'));
@@ -45,11 +47,18 @@ class LocationService {
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 30000,
-                    maximumAge: 300000 // 5 minutes
+                    timeout: 20000,
+                    maximumAge
                 }
             );
         });
+    }
+
+    /**
+     * Get a fresh GPS position only. No cache, no fallback. Use for "Use current location" button.
+     */
+    async getFreshLocation() {
+        return this.getCurrentLocation({ maximumAge: 0 });
     }
 
     /**

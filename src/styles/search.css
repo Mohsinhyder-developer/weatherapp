@@ -12,6 +12,33 @@
     transform: translateX(0);
 }
 
+/* Desktop: centered modal with fade */
+@media (min-width: 768px) {
+    #search-page {
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    #search-page.translate-x-full {
+        transform: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    #search-page.translate-x-0 {
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+    }
+    .search-overlay-inner {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #search-page.translate-x-full .search-overlay-inner {
+        transform: scale(0.96);
+    }
+    #search-page.translate-x-0 .search-overlay-inner {
+        transform: scale(1);
+    }
+}
+
 /* Glass Input */
 .glass-input {
     background: rgba(255, 255, 255, 0.1);

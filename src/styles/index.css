@@ -3,25 +3,51 @@
 @import '@ionic/core/css/normalize.css';
 @import '@ionic/core/css/structure.css';
 @import '@ionic/core/css/typography.css';
-@import 'leaflet/dist/leaflet.css';
+@import './search.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './search.css';
 
+/* ============================================
+   CHANGE SITE COLOR: set --app-color below.
+   Examples: #1e3a8a (dark blue) | #1e40af | #0f172a (slate blue)
+   ============================================ */
 :root {
-  --ion-font-family: 'Inter', system-ui, sans-serif;
-  --ion-background-color: transparent;
-  --ion-text-color: #ffffff;
+  --app-color: #31255a;
+  --ion-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --ion-background-color: var(--app-color);
+  --ion-text-color: #fff;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* One color: everything uses --app-color, text is white */
+.bg-app { background-color: var(--app-color); }
+.text-app { color: #fff; }
+.border-app { border-color: rgba(255,255,255,0.25); }
+.card-light {
+  background: var(--app-color);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
 }
 
 /* --- Layout Reset --- */
-html,
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 body,
 #app {
   width: 100%;
   height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -30,14 +56,17 @@ body,
 body {
   font-family: var(--ion-font-family);
   -webkit-font-smoothing: antialiased;
-  background-color: #0f172a;
-  color: #ffffff;
+  background-color: var(--app-color);
+  color: #fff;
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
 }
 
 /* Responsive Container */
 ion-app {
   max-width: 100%;
   margin: 0 auto;
+  min-height: 100%;
 }
 
 ion-page#main-page {
@@ -45,20 +74,100 @@ ion-page#main-page {
   margin: 0 auto;
 }
 
-/* Desktop: Constrain content width for better UX */
+/* Tablet & Desktop: Constrain content width for better UX */
+@media (min-width: 640px) {
+  ion-page#main-page {
+    max-width: 100%;
+  }
+}
+
 @media (min-width: 768px) {
   ion-page#main-page {
-    max-width: 600px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.2);
   }
+}
+
+/* --- Single page layout (no inner scroll, one flow) --- */
+.single-page-content {
+  --background: transparent;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.single-page-inner {
+  max-width: 100%;
+  padding: 0 1rem 2rem;
+  padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px) + 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Sunrise/sunset row: make it stand out so it’s not hidden */
+
+.hero-compact {
+  min-height: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.single-page-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+ion-toolbar {
+  --background: var(--app-color);
+  --color: #fff;
+  --border-color: rgba(255,255,255,0.2);
+}
+
+ion-title, ion-button {
+  color: #fff;
+}
+ion-title { font-weight: 600; }
+
+/* Header search & settings buttons – pill style */
+ion-toolbar .header-btn.ion-button {
+  --background: rgba(255, 255, 255, 0.12);
+  --background-hover: rgba(255, 255, 255, 0.22);
+  --background-activated: rgba(255, 255, 255, 0.18);
+  --color: #fff;
+  --border-radius: 50%;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  margin: 0 4px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+}
+ion-toolbar .header-btn.ion-button ion-icon {
+  font-size: 22px;
+}
+ion-toolbar .header-btn.ion-button:hover {
+  --background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+ion-toolbar .header-btn.ion-button:active {
+  transform: scale(0.95);
 }
 
 @media (min-width: 1024px) {
   ion-page#main-page {
-    max-width: 700px;
+    max-width: 720px;
   }
 }
 
-/* --- Dynamic Backgrounds --- */
+/* One color for whole site */
 #app-background {
   position: fixed;
   top: 0;
@@ -66,85 +175,332 @@ ion-page#main-page {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-size: 400% 400%;
-  transition: background 1.5s ease-in-out;
-  /* Default: Night/Dark */
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+  background: var(--app-color);
 }
 
-/* Weather Conditions - Applied via JS */
-.bg-clear-day {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%) !important;
+/* Main Layout Container */
+.dashboard-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.bg-clear-night {
-  background: linear-gradient(135deg, #0f172a 0%, #172554 50%, #1e1b4b 100%) !important;
-}
-
-.bg-clouds {
-  background: linear-gradient(135deg, #475569 0%, #334155 50%, #1e293b 100%) !important;
-}
-
-.bg-rain {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%) !important;
-}
-
-.bg-snow {
-  background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 50%, #64748b 100%) !important;
-}
-
-.bg-thunder {
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%) !important;
-}
-
-.bg-mist {
-  background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #1f2937 100%) !important;
-}
-
-/* --- Premium Glassmorphism --- */
-.premium-glass {
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-  color: white;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.premium-glass:active {
-  transform: scale(0.98);
-}
-
-.glass-panel {
-  background: rgba(15, 23, 42, 0.6);
+/* iOS Glass Card */
+.ios-card {
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-top-left-radius: 32px;
-  border-top-right-radius: 32px;
+  border-radius: 20px;
+  padding: 16px;
   color: white;
-  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* --- Typography --- */
-.hero-text {
-  font-size: 6rem;
-  font-weight: 800;
-  letter-spacing: -2px;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+.ios-card-header {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+/* Hero Section (Centered & Clean) */
+.hero-section {
+  text-align: center;
+  padding: 20px 0 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Consistent spacing */
+}
+
+.hero-city {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-temp {
+  font-family: 'Inter', sans-serif;
+  font-size: 5rem;
+  /* Reduced from 6rem */
+  font-weight: 300;
+  /* Light weight for elegance */
   line-height: 1;
+  letter-spacing: -0.04em;
+  margin: 0;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+}
+
+.hero-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+}
+
+.hero-range {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+/* Hourly Forecast (Horizontal Scroll) */
+.hourly-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hourly-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hourly-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+  gap: 8px;
+}
+
+/* Daily Forecast (Vertical List) */
+.daily-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.daily-row:last-child {
+  border-bottom: none;
+}
+
+.daily-day {
+  flex: 1;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.daily-icon {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.daily-temps {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  font-weight: 600;
+}
+
+.temp-min {
+  opacity: 0.6;
+}
+
+/* Grid Layout for Details */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --- Ionic Overrides --- */
+ion-content {
+  --background: transparent;
+}
+
+/* Search Bar - Clean iOS Style */
+ion-searchbar {
+  --background: rgba(0, 0, 0, 0.2) !important;
+  --color: white !important;
+  --placeholder-color: rgba(255, 255, 255, 0.6) !important;
+  --icon-color: rgba(255, 255, 255, 0.6) !important;
+  --border-radius: 12px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Modals */
+ion-modal {
+  --background: #1e293b;
+  --border-radius: 16px;
+}
+
+/* Utilities */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button Reset */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+
+/* Premium Card (Solid Matte) */
+.premium-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  /* Slate 800 -> Slate 900 */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  /* Inner highlight for depth */
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Tactile Buttons */
+.btn-tactile {
+  background: white;
+  color: #0f172a;
+  border-radius: 9999px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  padding: 12px 24px;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s active;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.btn-tactile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background: #f8fafc;
+}
+
+.btn-tactile:active {
+  transform: scale(0.95);
+}
+
+.btn-icon-tactile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.8);
+  /* Slate 800 */
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon-tactile:hover {
+  background: #334155;
+  /* Slate 700 */
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Typography (High Contrast) */
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-amber {
+  background: linear-gradient(135deg, #fcd34d 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-text {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(5rem, 15vw, 9rem);
+  font-weight: 800;
+  /* Bold for heavy impact */
+  letter-spacing: -0.05em;
+  color: white;
+  line-height: 0.9;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
 }
 
 .hero-condition {
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: capitalize;
-  margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  /* Slate 400 */
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 8px 24px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* --- Ionic Overrides --- */
@@ -159,26 +515,21 @@ ion-modal {
   --max-width: 500px;
   --height: auto;
   --max-height: 90%;
-  --border-radius: 24px;
-  align-items: center;
-  justify-content: center;
+  --border-radius: 32px;
 }
 
 ion-modal::part(backdrop) {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.85);
+  /* Darker backdrop */
+  backdrop-filter: blur(5px);
 }
 
 ion-modal::part(content) {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(24px);
-  border-radius: 24px;
+  background: #0f172a;
+  /* Solid Slate 900 */
+  border-radius: 32px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Force modals to display as overlays not inline */
@@ -196,25 +547,36 @@ ion-modal.show-modal {
   z-index: 10000 !important;
 }
 
+/* Search Bar (Solid) */
 ion-searchbar {
-  --background: rgba(255, 255, 255, 0.1) !important;
+  --background: #1e293b !important;
+  /* Solid Slate 800 */
   --color: white !important;
-  --placeholder-color: rgba(255, 255, 255, 0.5) !important;
-  --icon-color: white !important;
-  --border-radius: 12px !important;
+  --placeholder-color: #94a3b8 !important;
+  --icon-color: #cbd5e1 !important;
+  --border-radius: 16px !important;
   padding: 0 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+ion-searchbar:focus-within {
+  --background: #334155 !important;
+  border-color: #3b82f6;
 }
 
 ion-segment {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
+  background: #1e293b;
+  border-radius: 16px;
   padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ion-segment-button {
-  --color: rgba(255, 255, 255, 0.6);
+  --color: #94a3b8;
   --color-checked: white;
-  --indicator-color: rgba(255, 255, 255, 0.15);
+  --indicator-color: #3b82f6;
+  /* Blue indicator */
 }
 
 /* --- Utilities --- */
@@ -234,7 +596,7 @@ ion-segment-button {
   }
 
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-12px);
   }
 
   100% {
@@ -243,18 +605,18 @@ ion-segment-button {
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 0;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
 
   to {
@@ -264,6 +626,269 @@ ion-segment-button {
 }
 
 .ion-padding {
-  --padding-start: 20px;
-  --padding-end: 20px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+/* --- Slider System --- */
+.weather-slider-container {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  height: 100%;
+}
+
+.weather-slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+.slider-section {
+  min-width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Slider Navigation (Solid Pill) */
+.slider-nav {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #1e293b;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #475569;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.slider-dot:hover {
+  background: #94a3b8;
+  transform: scale(1.2);
+}
+
+.slider-dot.active {
+  background: #3b82f6;
+  /* Blue active dot */
+  width: 24px;
+  /* Stretched pill for active */
+  border-radius: 4px;
+}
+
+/* Slider Arrows */
+.slider-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.slider-arrow:hover {
+  background: #334155;
+  transform: translateY(-50%) scale(1.1);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.slider-arrow.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slider-arrow-left {
+  left: 40px;
+}
+
+.slider-arrow-right {
+  right: 40px;
+}
+
+@media (min-width: 1024px) {
+  .slider-arrow {
+    display: flex;
+  }
+}
+
+/* Section-Specific Styles */
+.section-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.section-content {
+  padding: 2rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section-content h2 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.section-content::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .section-hero {
+    padding: 4rem;
+  }
+
+  .section-content {
+    padding: 4rem;
+  }
+
+  .slider-nav {
+    bottom: 60px;
+  }
+
+  /* Tablet Grids */
+  .grid-cols-2 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-hero {
+    padding: 6rem;
+  }
+
+  .section-content {
+    padding: 4rem 6rem;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* --- Responsive: main content & touch targets --- */
+#hero-weather {
+  min-height: 280px;
+  padding: 1rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  #hero-weather {
+    min-height: 320px;
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #hero-weather {
+    min-height: 360px;
+    padding: 2rem 2.5rem;
+  }
+}
+
+/* Details panel: responsive max-height so it scrolls nicely on small screens */
+.weather-details-panel {
+  max-height: 55vh;
+}
+
+@media (min-width: 640px) {
+  .weather-details-panel {
+    max-height: 58vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .weather-details-panel {
+    max-height: 62vh;
+  }
+}
+
+/* Touch-friendly minimum sizes */
+ion-button,
+button[id^="btn-"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Header safe area and truncation */
+ion-toolbar {
+  padding-top: max(0px, env(safe-area-inset-top)) !important;
+}
+
+#header-location {
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  max-width: 60vw;
+  margin: 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Settings overlay: desktop centered modal */
+@media (min-width: 768px) {
+  #settings-page {
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  #settings-page.translate-x-full {
+    transform: none !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  #settings-page.translate-x-0 {
+    transform: none !important;
+    opacity: 1;
+    visibility: visible;
+  }
+  .settings-overlay-inner {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #settings-page.translate-x-full .settings-overlay-inner {
+    transform: scale(0.96);
+  }
+  #settings-page.translate-x-0 .settings-overlay-inner {
+    transform: scale(1);
+  }
 }

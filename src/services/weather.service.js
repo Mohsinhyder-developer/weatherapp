@@ -281,10 +281,42 @@ class WeatherService {
     }
 
     /**
-     * Get weather icon URL
+     * OpenWeatherMap icon code → Basmilius animated weather icon name
+     */
+    _owmToBasmilius = {
+        '01d': 'clear-day',
+        '01n': 'clear-night',
+        '02d': 'partly-cloudy-day',
+        '02n': 'partly-cloudy-night',
+        '03d': 'cloudy',
+        '03n': 'cloudy',
+        '04d': 'overcast-day',
+        '04n': 'overcast-night',
+        '09d': 'partly-cloudy-day-drizzle',
+        '09n': 'partly-cloudy-night-drizzle',
+        '10d': 'partly-cloudy-day-rain',
+        '10n': 'partly-cloudy-night-rain',
+        '11d': 'thunderstorms-day-rain',
+        '11n': 'thunderstorms-night-rain',
+        '13d': 'partly-cloudy-day-snow',
+        '13n': 'partly-cloudy-night-snow',
+        '50d': 'mist',
+        '50n': 'mist',
+    };
+
+    /**
+     * Get weather icon URL (Basmilius animated SVG)
      */
     getIconUrl(iconCode) {
-        return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        const name = this._owmToBasmilius[iconCode] || 'not-available';
+        return `https://basmilius.github.io/weather-icons/production/fill/all/${name}.svg`;
+    }
+
+    /**
+     * Get metric/UI icon URL (Basmilius static SVG)
+     */
+    getMetricIconUrl(name) {
+        return `https://basmilius.github.io/weather-icons/production/fill/all/${name}.svg`;
     }
 }
 

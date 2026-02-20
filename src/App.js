@@ -6,7 +6,7 @@ import astronomyService from './services/astronomy.service.js';
 import weatherCharts from './utils/charts.js';
 import { units } from './utils/units.js';
 import { formatters } from './utils/formatters.js';
-import theme from './utils/theme.js';
+import theme, { THEMES } from './utils/theme.js';
 
 class App {
   constructor() {
@@ -14,7 +14,7 @@ class App {
     this.currentWeather = null;
     this.currentLocation = null;
     this.favorites = [];
-    this.preferences = { units: 'metric', theme: 'light' };
+    this.preferences = { units: 'metric', theme: 'twilight' };
     this.astronomyData = null;
     this.charts = { temperature: null, precipitation: null };
   }
@@ -22,15 +22,16 @@ class App {
   async init() {
     // Show simple loading state to prevent flash of auth
     document.getElementById('app').innerHTML = `
-      <div class="h-screen w-full flex flex-col items-center justify-center bg-app overflow-hidden relative">
+      <div class="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative">
+         <div id="app-background" class="app-background-el"></div>
          <div class="relative z-10 flex flex-col items-center text-app">
             <div class="w-20 h-20 mb-6 relative">
-               <div class="absolute inset-0 border-4 border-white/30 rounded-full animate-ping"></div>
-               <div class="absolute inset-0 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+               <div class="absolute inset-0 border-4 border-white/20 rounded-full animate-ping"></div>
+               <div class="absolute inset-0 border-4 border-white/80 border-t-transparent rounded-full animate-spin"></div>
                <ion-icon name="cloudy-night" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white"></ion-icon>
             </div>
             <div class="text-xl font-bold tracking-widest uppercase animate-pulse text-white">Weather App</div>
-            <div class="text-xs text-white/80 mt-2 tracking-wide">Synkly Design</div>
+            <div class="text-xs text-white/60 mt-2 tracking-wide">Loading your forecast...</div>
          </div>
       </div>
     `;
@@ -43,7 +44,7 @@ class App {
 
   async loadPreferences() {
     this.preferences.units = await storageService.getPreference('units', 'metric');
-    this.preferences.theme = await storageService.getPreference('theme', 'light');
+    this.preferences.theme = await storageService.getPreference('theme', 'twilight');
     theme.setTheme(this.preferences.theme); // Apply theme
     this.favorites = await storageService.getAllFavorites();
   }
@@ -58,19 +59,63 @@ class App {
 
   getWeatherAppHTML() {
     return `
-      <div id="app-background"></div>
+      <div id="app-background" class="app-background-el"></div>
+      
+      <!-- Mobile Side Menu Overlay -->
+      <div id="side-menu-overlay" class="side-menu-overlay"></div>
+      
+      <!-- Side Menu (mobile drawer) -->
+      <nav id="side-menu" class="side-menu">
+        <div class="side-menu-bg"></div>
+        <div class="side-menu-content">
+          <div class="side-menu-header">
+            <div class="side-menu-avatar">
+              <ion-icon name="cloudy-night" class="text-2xl text-white"></ion-icon>
+            </div>
+            <div>
+              <div class="text-base font-bold text-white">Weather App</div>
+              <div class="text-xs text-white/60">Your personal forecast</div>
+            </div>
+            <button id="btn-close-menu" class="ml-auto p-2 text-white/70 hover:text-white transition rounded-full hover:bg-white/10">
+              <ion-icon name="close" class="text-xl"></ion-icon>
+            </button>
+          </div>
+          <div class="side-menu-items">
+            <button class="side-menu-item" id="menu-search">
+              <ion-icon name="search" class="text-lg"></ion-icon>
+              <span>Search Location</span>
+            </button>
+            <button class="side-menu-item" id="menu-settings">
+              <ion-icon name="settings-outline" class="text-lg"></ion-icon>
+              <span>Settings</span>
+            </button>
+            <button class="side-menu-item" id="menu-refresh">
+              <ion-icon name="locate" class="text-lg"></ion-icon>
+              <span>Update Location</span>
+            </button>
+          </div>
+          <div class="side-menu-footer">
+            <div class="text-[10px] text-white/40 uppercase tracking-widest">Version 3.0.0</div>
+          </div>
+        </div>
+      </nav>
       
       <ion-page id="main-page">
         <ion-header class="ion-no-border">
           <ion-toolbar>
              <ion-buttons slot="start">
-               <ion-button id="btn-settings" class="header-btn header-btn-settings" fill="clear">
+               <!-- Mobile: hamburger menu -->
+               <ion-button id="btn-menu-open" class="header-btn mobile-only" fill="clear">
+                 <ion-icon name="menu-outline"></ion-icon>
+               </ion-button>
+               <!-- Desktop: settings button -->
+               <ion-button id="btn-settings" class="header-btn desktop-only" fill="clear">
                  <ion-icon name="settings-outline"></ion-icon>
                </ion-button>
              </ion-buttons>
              <ion-title class="text-center" id="header-location">Getting your location…</ion-title>
              <ion-buttons slot="end">
-               <ion-button id="btn-search-open" class="header-btn header-btn-search" fill="clear">
+               <ion-button id="btn-search-open" class="header-btn desktop-only" fill="clear">
                  <ion-icon name="search"></ion-icon>
                </ion-button>
              </ion-buttons>
@@ -80,14 +125,12 @@ class App {
         <ion-content class="single-page-content">
           <div id="weather-alerts"></div>
 
-          <!-- Single page: hero + hourly + 7-day + metrics in one flow -->
           <div class="single-page-inner">
             <div id="hero-weather" class="hero-compact flex flex-col items-center justify-center py-4 px-4 text-center relative">
                <div class="text-white/90">Loading Weather...</div>
             </div>
 
             <div id="weather-details-content" class="single-page-details">
-               <!-- Populate via JS: Hourly, 7-day, metrics -->
             </div>
           </div>
         </ion-content>
@@ -97,17 +140,17 @@ class App {
 
   getSearchPageHTML() {
     return `
-      <div id="search-page" class="search-overlay fixed inset-0 z-50 bg-app translate-x-full flex flex-col md:items-center md:justify-center md:bg-black/50 md:backdrop-blur-sm">
-        <div class="search-overlay-inner w-full h-full md:max-w-lg md:max-h-[85vh] md:rounded-2xl md:shadow-2xl md:overflow-hidden flex flex-col bg-app md:border border-app">
+      <div id="search-page" class="search-overlay fixed inset-0 z-50 translate-x-full flex flex-col md:items-center md:justify-center md:bg-black/50 md:backdrop-blur-sm">
+        <div class="search-overlay-inner themed-overlay-bg w-full h-full md:max-w-lg md:max-h-[85vh] md:rounded-2xl md:shadow-2xl md:overflow-hidden flex flex-col md:border border-white/15">
         <!-- Header -->
-        <div class="p-4 pt-12 md:pt-4 border-b border-app flex items-center gap-4 shrink-0">
-           <button id="btn-close-search" class="p-2 -ml-2 text-white/80 hover:text-white transition">
+        <div class="p-4 pt-12 md:pt-4 border-b border-white/10 flex items-center gap-4 shrink-0">
+           <button id="btn-close-search" class="overlay-icon-btn p-2 -ml-2 text-white/80 hover:text-white transition rounded-full hover:bg-white/10">
               <ion-icon name="arrow-back" class="text-2xl"></ion-icon>
            </button>
            <div class="flex-1 relative">
               <input type="text" id="search-input" placeholder="Search City or Country" 
-                     class="w-full bg-white/15 text-white p-3 pl-10 rounded-xl border border-app focus:border-white/50 transition outline-none placeholder:text-white/60">
-              <ion-icon name="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-white/60"></ion-icon>
+                     class="w-full bg-white/10 text-white p-3 pl-10 rounded-xl border border-white/15 focus:border-white/40 focus:bg-white/15 transition outline-none placeholder:text-white/50 backdrop-blur">
+              <ion-icon name="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50"></ion-icon>
               <div id="search-loader" class="hidden absolute right-3 top-1/2 -translate-y-1/2">
                  <div class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
               </div>
@@ -118,25 +161,26 @@ class App {
         <div class="flex-1 overflow-y-auto search-scroll p-4 text-white">
            
            <!-- Current Location Button -->
-           <button type="button" id="btn-use-location" class="w-full mb-6 flex items-center gap-3 p-4 bg-white/15 hover:bg-white/25 border border-app rounded-xl transition group">
-              <div class="p-2 bg-white/25 rounded-lg text-white group-hover:scale-110 transition-transform">
+           <button type="button" id="btn-use-location" class="w-full mb-6 flex items-center gap-3 p-4 bg-white/10 hover:bg-white/20 border border-white/15 rounded-2xl transition group backdrop-blur-sm">
+              <div class="p-2.5 bg-white/20 rounded-xl text-white group-hover:scale-110 transition-transform">
                  <ion-icon name="navigate" class="text-xl"></ion-icon>
               </div>
               <div class="text-left">
                  <div class="font-bold text-white">Use Current Location</div>
-                 <div class="text-xs text-white/80">Get weather for your exact position</div>
+                 <div class="text-xs text-white/70">Get weather for your exact position</div>
               </div>
+              <ion-icon name="chevron-forward" class="text-white/40 ml-auto text-lg"></ion-icon>
            </button>
 
            <!-- Recent/Favorites Section -->
            <div id="favorites-section">
-              <h3 class="text-xs font-bold text-white/80 uppercase mb-3 tracking-wide px-1">Saved Locations</h3>
+              <h3 class="section-label px-1 mb-3">Saved Locations</h3>
               <div id="favorites-list" class="space-y-2 mb-8"></div>
            </div>
 
            <!-- Results Section -->
            <div id="results-section">
-              <h3 class="text-xs font-bold text-white/80 uppercase mb-3 tracking-wide px-1">Search Results</h3>
+              <h3 class="section-label px-1 mb-3">Search Results</h3>
               <div id="search-results-list" class="space-y-2 pb-20"></div>
            </div>
         </div>
@@ -146,13 +190,14 @@ class App {
   }
 
   getSettingsPageHTML() {
+    const themes = theme.getAvailableThemes();
     return `
-      <div id="settings-page" class="settings-overlay fixed inset-0 z-50 bg-app translate-x-full flex flex-col transition-transform duration-300 md:items-center md:justify-center md:bg-black/50 md:backdrop-blur-sm">
-        <div class="settings-overlay-inner w-full h-full md:max-w-lg md:max-h-[85vh] md:rounded-2xl md:shadow-2xl md:overflow-hidden flex flex-col md:border border-app bg-app text-white">
+      <div id="settings-page" class="settings-overlay fixed inset-0 z-50 translate-x-full flex flex-col transition-transform duration-300 md:items-center md:justify-center md:bg-black/50 md:backdrop-blur-sm">
+        <div class="settings-overlay-inner themed-overlay-bg w-full h-full md:max-w-lg md:max-h-[85vh] md:rounded-2xl md:shadow-2xl md:overflow-hidden flex flex-col md:border border-white/15 text-white">
         <!-- Header -->
-        <div class="p-4 pt-12 md:pt-4 border-b border-app flex items-center justify-between shrink-0">
+        <div class="p-4 pt-12 md:pt-4 border-b border-white/10 flex items-center justify-between shrink-0">
            <h2 class="text-xl font-bold text-white">Settings</h2>
-           <button id="btn-close-settings" class="p-2 -mr-2 text-white/80 hover:text-white transition bg-transparent border-0">
+           <button id="btn-close-settings" class="overlay-icon-btn px-4 py-2 text-white/90 hover:text-white transition bg-white/10 hover:bg-white/20 rounded-full border border-white/15">
               <span class="text-sm font-bold uppercase tracking-wide">Done</span>
            </button>
         </div>
@@ -160,32 +205,36 @@ class App {
         <!-- Content -->
         <div class="flex-1 overflow-y-auto p-6 space-y-8">
             
+            <!-- Theme Section -->
+            <div class="space-y-4">
+                <h3 class="section-label pl-2">Theme</h3>
+                <div id="theme-grid" class="grid grid-cols-3 gap-3">
+                    ${themes.map(t => `
+                        <button class="theme-pick-btn group relative flex items-center justify-center p-3 rounded-2xl border transition-all duration-300 ${t.active ? 'bg-white/25 border-white/50 ring-2 ring-white/30' : 'bg-white/8 border-white/15 hover:bg-white/15 hover:border-white/30'}"
+                                data-theme="${t.id}">
+                            <span class="text-xs font-semibold text-white/90 text-center leading-tight">${t.name}</span>
+                            ${t.active ? '<div class="absolute top-1.5 right-1.5 w-2 h-2 bg-white rounded-full shadow-lg shadow-white/50"></div>' : ''}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+
             <!-- Units Section -->
             <div class="space-y-4">
-                <h3 class="text-xs font-bold text-white/80 uppercase tracking-widest pl-2">Display</h3>
+                <h3 class="section-label pl-2">Display</h3>
                 <div class="card-light p-1 rounded-2xl flex relative">
                      <div class="w-1/2 h-full absolute top-0 left-0 bg-white/25 rounded-xl transition-all duration-300" id="unit-indicator"></div>
                      <button class="flex-1 py-3 text-center z-10 font-medium text-white transition rounded-xl" id="btn-metric">Metric (°C)</button>
                      <button class="flex-1 py-3 text-center z-10 font-medium text-white/80 transition rounded-xl" id="btn-imperial">Imperial (°F)</button>
                 </div>
-
-                <div class="card-light p-4 rounded-2xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-white/15 text-white">
-                           <ion-icon name="color-palette"></ion-icon>
-                        </div>
-                        <span class="font-medium text-white">Dynamic Backgrounds</span>
-                    </div>
-                     <ion-toggle id="toggle-dynamic-bg" checked></ion-toggle>
-                </div>
             </div>
 
             <!-- Notifications Section -->
              <div class="space-y-4">
-                <h3 class="text-xs font-bold text-white/80 uppercase tracking-widest pl-2">Notifications</h3>
+                <h3 class="section-label pl-2">Notifications</h3>
                 <div class="card-light p-4 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-white/15 text-white">
+                        <div class="p-2.5 rounded-xl bg-white/15 text-white">
                            <ion-icon name="notifications"></ion-icon>
                         </div>
                         <span class="font-medium text-white">Severe Weather Alerts</span>
@@ -196,26 +245,26 @@ class App {
 
              <!-- Data Section -->
             <div class="space-y-4">
-                <h3 class="text-xs font-bold text-white/80 uppercase tracking-widest pl-2">Data & Storage</h3>
-                 <button id="btn-clear-cache" class="w-full card-light p-4 rounded-2xl flex items-center justify-between group hover:bg-white/10 transition border border-app">
+                <h3 class="section-label pl-2">Data & Storage</h3>
+                 <button id="btn-clear-cache" class="w-full card-light p-4 rounded-2xl flex items-center justify-between group hover:bg-white/15 transition border border-white/10">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-white/15 text-white">
+                        <div class="p-2.5 rounded-xl bg-white/15 text-white">
                            <ion-icon name="trash"></ion-icon>
                         </div>
                         <span class="font-medium text-white">Clear Cache & Reset</span>
                     </div>
-                    <ion-icon name="chevron-forward" class="text-white/80"></ion-icon>
+                    <ion-icon name="chevron-forward" class="text-white/50"></ion-icon>
                 </button>
             </div>
 
             <!-- About Section -->
-            <div class="pt-8 text-center">
-                 <div class="w-16 h-16 bg-white/2 rounded-2xl mx-auto mb-4 flex items-center justify-center border border-app">
+            <div class="pt-8 text-center pb-8">
+                 <div class="w-16 h-16 card-light mx-auto mb-4 rounded-2xl flex items-center justify-center">
                     <ion-icon name="cloudy-night" class="text-3xl text-white"></ion-icon>
                  </div>
                  <h4 class="text-lg font-bold text-white mb-1">Weather App</h4>
-                 <div class="text-white/80 text-sm">Version 2.0.0</div>
-                 <div class="text-white/60 text-xs mt-4">Designed with ❤️ using Ionic & Tailwind</div>
+                 <div class="text-white/70 text-sm">Version 3.0.0</div>
+                 <div class="text-white/50 text-xs mt-4">Designed with ❤️ using Ionic & Tailwind</div>
             </div>
 
         </div>
@@ -260,8 +309,63 @@ class App {
     const settingsModal = document.getElementById('settings-modal');
     const resultsList = document.getElementById('search-results-list');
     const loader = document.getElementById('search-loader');
+    const sideMenu = document.getElementById('side-menu');
+    const sideMenuOverlay = document.getElementById('side-menu-overlay');
 
-    // OPEN Search Page
+    // --- Side Menu (Mobile) ---
+    const openMenu = () => {
+      sideMenu?.classList.add('open');
+      sideMenuOverlay?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeMenu = () => {
+      sideMenu?.classList.remove('open');
+      sideMenuOverlay?.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    document.getElementById('btn-menu-open')?.addEventListener('click', openMenu);
+    document.getElementById('btn-close-menu')?.addEventListener('click', closeMenu);
+    sideMenuOverlay?.addEventListener('click', closeMenu);
+
+    // Menu item: open search
+    document.getElementById('menu-search')?.addEventListener('click', () => {
+      closeMenu();
+      setTimeout(() => {
+        searchPage.classList.remove('translate-x-full');
+        searchPage.classList.add('translate-x-0');
+        setTimeout(() => searchInput.focus(), 300);
+        this.renderFavoritesList();
+      }, 250);
+    });
+
+    // Menu item: open settings
+    document.getElementById('menu-settings')?.addEventListener('click', () => {
+      closeMenu();
+      const settingsPageEl = document.getElementById('settings-page');
+      setTimeout(() => {
+        settingsPageEl.classList.remove('translate-x-full');
+        settingsPageEl.classList.add('translate-x-0');
+      }, 250);
+    });
+
+    // Menu item: refresh location
+    document.getElementById('menu-refresh')?.addEventListener('click', async () => {
+      closeMenu();
+      const hero = document.getElementById('hero-weather');
+      const prevHtml = hero?.innerHTML;
+      if (hero) hero.innerHTML = '<div class="text-white/90">Getting your location…</div>';
+      try {
+        const loc = await locationService.getFreshLocation();
+        this.currentLocation = { lat: loc.lat, lon: loc.lon };
+        await this.loadWeather(false);
+      } catch (err) {
+        console.error(err);
+        if (hero && prevHtml) hero.innerHTML = prevHtml;
+      }
+    });
+
+    // OPEN Search Page (desktop header button)
     document.getElementById('btn-search-open')?.addEventListener('click', () => {
       searchPage.classList.remove('translate-x-full');
       searchPage.classList.add('translate-x-0');
@@ -325,10 +429,39 @@ class App {
     });
 
     // Dynamic Background Toggle (keeps same single color either way)
-    document.getElementById('toggle-dynamic-bg')?.addEventListener('ionChange', (e) => {
-      const bg = document.getElementById('app-background');
-      bg.style.display = e.detail.checked ? 'block' : 'none';
-      if (!e.detail.checked) document.getElementById('app').style.background = 'var(--app-color)';
+    // — REMOVED: replaced by multi-theme system
+    
+    // Theme Picker (grid of theme buttons)
+    document.getElementById('theme-grid')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.theme-pick-btn');
+      if (!btn) return;
+      const newTheme = btn.dataset.theme;
+      if (!newTheme) return;
+      
+      this.preferences.theme = newTheme;
+      theme.setTheme(newTheme);
+      await storageService.savePreference('theme', newTheme);
+      
+      // Update active states in the grid
+      document.querySelectorAll('.theme-pick-btn').forEach(b => {
+        const isActive = b.dataset.theme === newTheme;
+        b.classList.toggle('bg-white/25', isActive);
+        b.classList.toggle('border-white/50', isActive);
+        b.classList.toggle('ring-2', isActive);
+        b.classList.toggle('ring-white/30', isActive);
+        b.classList.toggle('bg-white/8', !isActive);
+        b.classList.toggle('border-white/15', !isActive);
+        
+        // Add/remove active dot
+        const dot = b.querySelector('.theme-active-dot');
+        if (isActive && !dot) {
+          const d = document.createElement('div');
+          d.className = 'theme-active-dot absolute top-1.5 right-1.5 w-2 h-2 bg-white rounded-full shadow-lg shadow-white/50';
+          b.appendChild(d);
+        } else if (!isActive && dot) {
+          dot.remove();
+        }
+      });
     });
 
     // Notifications Toggle
@@ -349,6 +482,43 @@ class App {
       if (newUnit !== this.preferences.units) {
         this.preferences.units = newUnit;
         await storageService.savePreference('units', newUnit);
+        this.loadWeather();
+      }
+    });
+
+    // Unit toggle buttons (Metric / Imperial)
+    const unitIndicator = document.getElementById('unit-indicator');
+    const btnMetric = document.getElementById('btn-metric');
+    const btnImperial = document.getElementById('btn-imperial');
+
+    const setUnitUI = (unit) => {
+      if (unitIndicator) {
+        unitIndicator.style.transform = unit === 'imperial' ? 'translateX(100%)' : 'translateX(0)';
+      }
+      if (btnMetric) {
+        btnMetric.classList.toggle('text-white', unit === 'metric');
+        btnMetric.classList.toggle('text-white/60', unit !== 'metric');
+      }
+      if (btnImperial) {
+        btnImperial.classList.toggle('text-white', unit === 'imperial');
+        btnImperial.classList.toggle('text-white/60', unit !== 'imperial');
+      }
+    };
+    setUnitUI(this.preferences.units);
+
+    btnMetric?.addEventListener('click', async () => {
+      if (this.preferences.units !== 'metric') {
+        this.preferences.units = 'metric';
+        setUnitUI('metric');
+        await storageService.savePreference('units', 'metric');
+        this.loadWeather();
+      }
+    });
+    btnImperial?.addEventListener('click', async () => {
+      if (this.preferences.units !== 'imperial') {
+        this.preferences.units = 'imperial';
+        setUnitUI('imperial');
+        await storageService.savePreference('units', 'imperial');
         this.loadWeather();
       }
     });
@@ -390,7 +560,7 @@ class App {
           }
 
           resultsList.innerHTML = cities.map(city => `
-  <div class="p-4 bg-white/15 rounded-xl mb-2 flex justify-between items-center cursor-pointer data-city-item hover:bg-white/25 transition border border-app"
+  <div class="p-4 bg-white/10 rounded-2xl mb-2 flex justify-between items-center cursor-pointer data-city-item hover:bg-white/20 transition border border-white/10"
 data-lat="${city.lat}" data-lon="${city.lon}" data-name="${city.name}" data-country="${city.country}">
                    <div>
                      <div class="font-bold text-white text-lg">${city.name}</div>
@@ -498,7 +668,7 @@ data-lat="${city.lat}" data-lon="${city.lon}" data-name="${city.name}" data-coun
     }
 
     list.innerHTML = this.favorites.map(city => `
-  <div class="p-3 bg-white/15 rounded-xl flex justify-between items-center cursor-pointer fav-item hover:bg-white/25 transition border border-app"
+  <div class="p-3 bg-white/10 rounded-2xl flex justify-between items-center cursor-pointer fav-item hover:bg-white/20 transition border border-white/10"
 data-lat="${city.lat}" data-lon="${city.lon}">
              <span class="font-medium text-white">${city.name}</span>
              <button class="btn-delete-fav p-2 text-white/80 hover:text-white transition">
@@ -583,119 +753,131 @@ data-lat="${city.lat}" data-lon="${city.lon}">
       header.setAttribute('title', 'Tap search to change location');
     }
 
-    // Update Hero (compact for single page)
+    // ——— HERO SECTION ———
     const hero = document.getElementById('hero-weather');
     if (hero) {
       hero.innerHTML = `
-  <div class="absolute top-0 right-0 p-2 fade-in" style="animation-delay: 0.1s">
-    <button id="btn-favorite" class="min-h-[44px] min-w-[44px] flex items-center justify-center text-2xl text-white/90 hover:text-white transition-colors rounded-full" aria-label="Add to favorites">
-      <ion-icon name="heart-outline"></ion-icon>
-    </button>
-           </div>
-           <div class="mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/90 bg-white/15 px-3 py-1 rounded-full inline-block fade-in">
-                ${formatters.formatShortDay(new Date())} • ${formatters.formatTime(new Date())}
-           </div>
-           <div class="relative flex items-center justify-center gap-3 sm:gap-4 fade-in" style="animation-delay: 0.2s">
-             <img src="${weatherService.getIconUrl(current.icon)}" class="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-lg animate-float" alt="${current.description}" onerror="this.src='https://openweathermap.org/img/wn/02d@4x.png'" />
-             <div>
-               <div class="text-4xl sm:text-5xl font-bold text-white">${Math.round(current.temp)}°</div>
-               <div class="text-white/90 text-sm sm:text-base capitalize">${current.description}</div>
-             </div>
-           </div>
-           <div class="flex gap-6 text-sm font-medium text-white/90 fade-in mt-1" style="animation-delay: 0.3s">
-              <span class="flex items-center gap-1"><ion-icon name="arrow-up"></ion-icon> ${Math.round(current.tempMax)}°</span>
-              <span class="flex items-center gap-1"><ion-icon name="arrow-down"></ion-icon> ${Math.round(current.tempMin)}°</span>
-           </div>
-           <button id="btn-refresh-loc" class="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-white/90 hover:text-white bg-white/15 hover:bg-white/25 px-4 py-2.5 rounded-xl transition fade-in min-h-[40px]" style="animation-delay: 0.4s">
-              <ion-icon name="locate"></ion-icon> Update Location
-           </button>
-`;
+        <div class="absolute top-0 right-0 p-2 fade-in" style="animation-delay:0.1s">
+          <button id="btn-favorite" class="min-h-[44px] min-w-[44px] flex items-center justify-center text-2xl text-white/80 hover:text-white transition-colors rounded-full hover:bg-white/10" aria-label="Favorite">
+            <ion-icon name="heart-outline"></ion-icon>
+          </button>
+        </div>
 
-      const favBtn = document.getElementById('btn-favorite');
-      if (favBtn) favBtn.addEventListener('click', () => this.toggleFavorite());
+        <div class="mb-3 text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-white/85 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full inline-block fade-in border border-white/10">
+          ${formatters.formatShortDay(new Date())} &bull; ${formatters.formatTime(new Date())}
+        </div>
 
-      const refreshBtn = document.getElementById('btn-refresh-loc');
-      if (refreshBtn) refreshBtn.addEventListener('click', () => this.loadWeather(true));
+        <div class="flex items-center justify-center gap-3 sm:gap-4 fade-in" style="animation-delay:0.2s">
+          <img src="${weatherService.getIconUrl(current.icon)}" class="hero-weather-icon animate-float" alt="${current.description}" onerror="this.style.display='none'" />
+          <div class="text-left">
+            <div class="hero-temp">${Math.round(current.temp)}°</div>
+            <div class="text-white/85 text-[13px] sm:text-sm capitalize font-medium">${current.description}</div>
+          </div>
+        </div>
 
+        <div class="flex gap-5 text-[13px] font-medium text-white/85 fade-in mt-1.5" style="animation-delay:0.3s">
+          <span class="flex items-center gap-1"><ion-icon name="arrow-up" class="text-white/60 text-xs"></ion-icon> ${Math.round(current.tempMax)}°</span>
+          <span class="flex items-center gap-1"><ion-icon name="arrow-down" class="text-white/60 text-xs"></ion-icon> ${Math.round(current.tempMin)}°</span>
+        </div>
+
+        <button id="btn-refresh-loc" class="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/85 hover:text-white bg-white/12 hover:bg-white/20 border border-white/15 px-5 py-2.5 rounded-full transition fade-in min-h-[38px]" style="animation-delay:0.4s">
+          <ion-icon name="locate" class="text-sm"></ion-icon> Update Location
+        </button>
+      `;
+
+      document.getElementById('btn-favorite')?.addEventListener('click', () => this.toggleFavorite());
+      document.getElementById('btn-refresh-loc')?.addEventListener('click', () => this.loadWeather(true));
       this.updateFavoriteButtonState();
     }
 
-    // Update Details: Hourly first (main focus), then 7-day + metrics
+    // ——— DETAILS SECTION ———
     const details = document.getElementById('weather-details-content');
     if (details) {
       details.innerHTML = `
-  <!-- Hourly Forecast -->
-           <section class="card-light p-4 mb-4 fade-in text-white" style="animation-delay: 0.5s" aria-label="Hourly forecast">
-              <h2 class="text-sm font-bold text-white/90 uppercase tracking-wider mb-3 pb-2 border-app border-b">Hourly Forecast</h2>
-              <div class="flex gap-3 overflow-x-auto pb-1 no-scrollbar -webkit-overflow-scrolling-touch">
-                 ${(hourly || []).map(h => `
-                    <div class="flex flex-col items-center min-w-[52px] flex-shrink-0 py-1 rounded-lg hover:bg-white/10 transition">
-                       <span class="text-[10px] text-white/80 mb-0.5">${formatters.formatTime(h.time)}</span>
-                       <img src="${weatherService.getIconUrl(h.icon)}" class="w-8 h-8 mb-0.5" alt="">
-                       <span class="font-bold text-sm text-white">${Math.round(h.temp)}°</span>
-                       <span class="text-[9px] text-white/80 flex items-center gap-0.5 mt-0.5">
-                           <ion-icon name="water" class="text-[10px]"></ion-icon> ${Math.round(h.pop * 100)}%
-                       </span>
-                    </div>
-                 `).join('')}
+
+        <!-- ★ HOURLY FORECAST ★ -->
+        <section class="card-light p-4 fade-in" style="animation-delay:0.5s">
+          <h2 class="section-label">Hourly Forecast</h2>
+          <div class="hourly-scroll">
+            ${(hourly || []).map((h, idx) => `
+              <div class="hourly-item${idx === 0 ? ' hourly-active' : ''}">
+                <span class="hourly-time">${formatters.formatTime(h.time)}</span>
+                <img src="${weatherService.getIconUrl(h.icon)}" class="hourly-icon" alt="" onerror="this.style.display='none'">
+                <span class="hourly-temp">${Math.round(h.temp)}°</span>
+                <span class="hourly-rain"><ion-icon name="water" class="text-[9px] text-blue-300/90"></ion-icon> ${Math.round(h.pop * 100)}%</span>
               </div>
-           </section>
+            `).join('')}
+          </div>
+        </section>
 
-           <!-- 7-Day -->
-           <section class="card-light p-4 mb-4 fade-in text-white" style="animation-delay: 0.6s">
-              <h2 class="text-sm font-bold text-white/90 uppercase tracking-wider mb-2 pb-2 border-app border-b">7-Day Forecast</h2>
-              <div class="space-y-2">
-                 ${(daily || []).map(d => `
-                    <div class="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-white/10 transition">
-                       <span class="w-14 font-medium text-white text-sm shrink-0">${formatters.formatShortDay(d.date)}</span>
-                       <img src="${weatherService.getIconUrl(d.icon)}" class="w-6 h-6 shrink-0" alt="">
-                       <span class="text-white/80 text-sm w-12 text-right">${Math.round(d.tempMin)}°</span>
-                       <span class="font-semibold text-white text-sm w-10 text-right">${Math.round(d.tempMax)}°</span>
-                    </div>
-                 `).join('')}
+        <!-- ★ 7-DAY FORECAST ★ -->
+        <section class="card-light p-4 fade-in" style="animation-delay:0.6s">
+          <h2 class="section-label">7-Day Forecast</h2>
+          <div class="daily-list">
+            ${(daily || []).map((d, i) => `
+              <div class="daily-row${i < (daily.length - 1) ? ' daily-row-border' : ''}">
+                <span class="daily-day">${formatters.formatShortDay(d.date)}</span>
+                <img src="${weatherService.getIconUrl(d.icon)}" class="daily-icon-img" alt="" onerror="this.style.display='none'">
+                <span class="daily-min">${Math.round(d.tempMin)}°</span>
+                <span class="daily-max">${Math.round(d.tempMax)}°</span>
               </div>
-           </section>
+            `).join('')}
+          </div>
+        </section>
 
-           <!-- Metrics -->
-  <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4 fade-in text-white" style="animation-delay: 0.7s">
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="speedometer-outline" class="text-xs"></ion-icon> Wind</div>
-      <div class="text-lg font-bold text-white">${current.windSpeed}<span class="text-xs font-normal text-white/80"> km/h</span></div>
-    </div>
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="water-outline" class="text-xs"></ion-icon> Humidity</div>
-      <div class="text-lg font-bold text-white">${current.humidity}<span class="text-xs">%</span></div>
-    </div>
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="thermometer-outline" class="text-xs"></ion-icon> Feels</div>
-      <div class="text-lg font-bold text-white">${Math.round(current.feelsLike)}°</div>
-    </div>
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="eye-outline" class="text-xs"></ion-icon> Vis</div>
-      <div class="text-lg font-bold text-white">${(current.visibility / 1000).toFixed(1)}<span class="text-xs text-white/80"> km</span></div>
-    </div>
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="sunny-outline" class="text-xs"></ion-icon> UV</div>
-      <div class="text-lg font-bold text-white">${uv !== null ? uv : '--'}</div>
-    </div>
-    <div class="card-light p-3 text-center">
-      <div class="text-[10px] text-white/80 uppercase flex items-center justify-center gap-1 mb-1"><ion-icon name="flower-outline" class="text-xs"></ion-icon> AQI</div>
-      <div class="text-sm font-bold text-white truncate">${airQuality ? airQuality.aqiDescription : '--'}</div>
-    </div>
-  </div>
+        <!-- ★ METRICS GRID — top row (3 cols) ★ -->
+        <div class="grid grid-cols-3 gap-2.5 fade-in" style="animation-delay:0.7s">
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('wind')}" class="metric-icon-img" alt="wind"></div>
+            <div class="metric-label">Wind</div>
+            <div class="metric-value">${current.windSpeed}<span class="metric-unit"> km/h</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('humidity')}" class="metric-icon-img" alt="humidity"></div>
+            <div class="metric-label">Humidity</div>
+            <div class="metric-value">${current.humidity}<span class="metric-unit">%</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('thermometer')}" class="metric-icon-img" alt="feels like"></div>
+            <div class="metric-label">Feels</div>
+            <div class="metric-value">${Math.round(current.feelsLike)}°</div>
+          </div>
+        </div>
 
-  <div class="card-light p-4 mb-4 flex justify-between items-center text-white">
-    <div class="text-center flex-1">
-      <div class="text-xs font-bold text-white/90 uppercase tracking-wider mb-1">Sunrise</div>
-      <div class="text-lg font-bold text-white">${current.sunrise ? formatters.formatTime(current.sunrise) : '--'}</div>
-    </div>
-    <div class="h-8 w-px bg-white/25 flex-shrink-0" aria-hidden="true"></div>
-    <div class="text-center flex-1">
-      <div class="text-xs font-bold text-white/90 uppercase tracking-wider mb-1">Sunset</div>
-      <div class="text-lg font-bold text-white">${current.sunset ? formatters.formatTime(current.sunset) : '--'}</div>
-    </div>
-  </div>
-`;
+        <!-- ★ METRICS GRID — bottom row (3 cols) ★ -->
+        <div class="grid grid-cols-3 gap-2.5 fade-in" style="animation-delay:0.75s">
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('mist')}" class="metric-icon-img" alt="visibility"></div>
+            <div class="metric-label">Vis</div>
+            <div class="metric-value">${(current.visibility / 1000).toFixed(1)}<span class="metric-unit"> km</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('uv-index')}" class="metric-icon-img" alt="uv"></div>
+            <div class="metric-label">UV</div>
+            <div class="metric-value">${uv !== null ? uv : '--'}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('dust-wind')}" class="metric-icon-img" alt="air quality"></div>
+            <div class="metric-label">AQI</div>
+            <div class="metric-value metric-value-sm">${airQuality ? airQuality.aqiDescription : '--'}</div>
+          </div>
+        </div>
+
+        <!-- ★ SUNRISE / SUNSET ★ -->
+        <div class="card-light p-4 flex fade-in" style="animation-delay:0.8s">
+          <div class="flex-1 text-center flex flex-col items-center">
+            <img src="${weatherService.getMetricIconUrl('sunrise')}" class="sr-icon" alt="sunrise">
+            <div class="sr-label">Sunrise</div>
+            <div class="sr-value">${current.sunrise ? formatters.formatTime(current.sunrise) : '--'}</div>
+          </div>
+          <div class="sr-divider"></div>
+          <div class="flex-1 text-center flex flex-col items-center">
+            <img src="${weatherService.getMetricIconUrl('sunset')}" class="sr-icon" alt="sunset">
+            <div class="sr-label">Sunset</div>
+            <div class="sr-value">${current.sunset ? formatters.formatTime(current.sunset) : '--'}</div>
+          </div>
+        </div>
+      `;
     }
   }
 

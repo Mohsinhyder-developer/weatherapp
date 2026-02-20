@@ -1,0 +1,110 @@
+﻿/* ============================================
+   LOTTIE WEATHER ICON CONTAINERS
+   Premium animated weather icons
+   ============================================ */
+
+/* --- BASE CONTAINER --- */
+.lottie-weather {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.lottie-weather svg {
+  overflow: visible;
+}
+
+/* --- HERO ICON GLOW --- */
+.hero-weather-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-weather-icon .lottie-weather {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.12));
+  animation: lottie-hero-glow 4s ease-in-out infinite;
+}
+
+@keyframes lottie-hero-glow {
+  0%, 100% { filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.1)); }
+  50% { filter: drop-shadow(0 0 28px rgba(168, 230, 240, 0.22)); }
+}
+
+/* --- HOURLY ICON STYLES --- */
+.hourly-icon-wrap {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.hourly-item:hover .hourly-icon-wrap .lottie-weather {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+  transform: scale(1.08);
+}
+
+/* Active hour glow */
+.hourly-item.hourly-active .hourly-icon-wrap .lottie-weather {
+  filter: drop-shadow(0 0 8px rgba(168, 230, 240, 0.5));
+}
+
+.hourly-item.hourly-active {
+  background: rgba(168, 230, 240, 0.1);
+  border: 1px solid rgba(168, 230, 240, 0.2);
+}
+
+.hourly-item.hourly-active .hourly-temp {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(168, 230, 240, 0.4);
+}
+
+/* --- DAILY ICON STYLES --- */
+.daily-icon-wrap {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.daily-row:hover .daily-icon-wrap .lottie-weather {
+  filter: drop-shadow(0 0 6px rgba(168, 230, 240, 0.3));
+  transform: scale(1.1);
+}
+
+/* --- SUNRISE / SUNSET ICON --- */
+.sr-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+/* --- METRIC CARD ICONS --- */
+.metric-card .metric-icon {
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover .metric-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px rgba(168, 230, 240, 0.35));
+}
+
+/* --- REDUCED MOTION RESPECT --- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-weather-icon .lottie-weather {
+    animation: none !important;
+    filter: none !important;
+  }
+  .lottie-weather svg * {
+    animation-play-state: paused !important;
+  }
+}

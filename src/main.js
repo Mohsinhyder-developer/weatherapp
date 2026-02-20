@@ -43,7 +43,12 @@ import {
   colorPalette,
   arrowBack,
   navigate,
-  locationOutline
+  locationOutline,
+  moonOutline,
+  timeOutline,
+  calendarOutline,
+  menuOutline,
+  close
 } from 'ionicons/icons';
 
 import theme from './utils/theme.js';
@@ -94,6 +99,11 @@ addIcons({
   'arrow-back': arrowBack,
   'navigate': navigate,
   'location-outline': locationOutline,
+  'moon-outline': moonOutline,
+  'time-outline': timeOutline,
+  'calendar-outline': calendarOutline,
+  'menu-outline': menuOutline,
+  'close': close,
 });
 
 // Initialize theme

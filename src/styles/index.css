@@ -10,26 +10,245 @@
 @tailwind utilities;
 
 /* ============================================
-   CHANGE SITE COLOR: set --app-color below.
-   Examples: #1e3a8a (dark blue) | #1e40af | #0f172a (slate blue)
+   MULTI-THEME WEATHER APP
    ============================================ */
+
 :root {
   --app-color: #31255a;
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: 20px;
+  --card-radius: 20px;
   --ion-font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --ion-background-color: var(--app-color);
+  --ion-background-color: transparent;
   --ion-text-color: #fff;
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* One color: everything uses --app-color, text is white */
+/* ============================================
+   THEME BACKGROUNDS
+   ============================================ */
+
+/* --- Celestial Night (Galaxy Purple) --- */
+.theme-celestial {
+  --app-color: #0f0a2e;
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+.app-background-el.bg-celestial {
+  background: linear-gradient(160deg, 
+    #0f0a2e 0%, 
+    #1a0e3e 20%, 
+    #2d1b69 40%, 
+    #1e1150 60%, 
+    #130d33 80%, 
+    #0a0620 100%
+  );
+}
+.app-background-el.bg-celestial::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse 600px 400px at 20% 20%, rgba(120, 80, 220, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 80% 60%, rgba(180, 100, 255, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 10%, rgba(100, 140, 255, 0.1) 0%, transparent 60%);
+}
+
+/* --- Twilight (Purple Dusk) --- */
+.theme-twilight {
+  --app-color: #31255a;
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+}
+
+.app-background-el.bg-twilight {
+  background: linear-gradient(170deg, 
+    #1a1040 0%, 
+    #31255a 20%, 
+    #4a3580 40%, 
+    #5d3f99 55%, 
+    #3d2870 75%, 
+    #211550 100%
+  );
+}
+.app-background-el.bg-twilight::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse 500px 400px at 30% 15%, rgba(140, 100, 255, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 70% 70%, rgba(200, 150, 255, 0.1) 0%, transparent 60%);
+}
+
+/* --- Golden Sunset --- */
+.theme-sunset {
+  --app-color: #5c2d0e;
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+}
+
+.app-background-el.bg-sunset {
+  background: linear-gradient(175deg, 
+    #1a0a2e 0%, 
+    #3d1642 10%, 
+    #6b2040 20%, 
+    #a0393a 35%, 
+    #d4713a 50%, 
+    #e8a54a 65%, 
+    #f0c56c 78%, 
+    #d4713a 100%
+  );
+}
+.app-background-el.bg-sunset::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse 700px 300px at 50% 65%, rgba(255, 200, 80, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 250px at 60% 50%, rgba(255, 120, 50, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 300px 200px at 30% 80%, rgba(255, 80, 80, 0.1) 0%, transparent 60%);
+}
+
+/* --- Aurora (Northern Lights) --- */
+.theme-aurora {
+  --app-color: #0a1628;
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+.app-background-el.bg-aurora {
+  background: linear-gradient(170deg, 
+    #020810 0%, 
+    #0a1628 20%, 
+    #0d2137 40%, 
+    #0a1d30 60%, 
+    #061220 80%, 
+    #020810 100%
+  );
+}
+.app-background-el.bg-aurora::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse 600px 200px at 25% 25%, rgba(0, 255, 150, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 180px at 65% 35%, rgba(0, 200, 255, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 150px at 45% 15%, rgba(120, 255, 200, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 350px 200px at 80% 50%, rgba(0, 180, 255, 0.06) 0%, transparent 60%);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+}
+
+@keyframes auroraShift {
+  0% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-10px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(5px) scale(0.98); opacity: 0.8; }
+}
+
+/* --- Deep Ocean --- */
+.theme-ocean {
+  --app-color: #0a1628;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+.app-background-el.bg-ocean {
+  background: linear-gradient(170deg, 
+    #0a1628 0%, 
+    #0d2847 20%, 
+    #14375f 40%, 
+    #1a4a7a 55%, 
+    #0d3560 75%, 
+    #0a1e3d 100%
+  );
+}
+.app-background-el.bg-ocean::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(ellipse 500px 350px at 30% 30%, rgba(60, 140, 255, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 280px at 70% 60%, rgba(0, 180, 220, 0.08) 0%, transparent 60%);
+}
+
+/* --- Background base styles --- */
+.app-background-el {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  transition: background 0.8s ease;
+}
+.app-background-el::before {
+  pointer-events: none;
+}
+
+/* ============================================
+   STARS & SHOOTING STARS
+   ============================================ */
+.stars-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite alternate;
+  opacity: 0;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0.3; transform: scale(0.9); }
+}
+
+.shooting-star {
+  position: absolute;
+  left: -5%;
+  width: 80px;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
+  border-radius: 2px;
+  animation: shoot 6s ease-in infinite;
+  opacity: 0;
+}
+
+@keyframes shoot {
+  0% { transform: translateX(0) translateY(0) rotate(-25deg); opacity: 0; }
+  2% { opacity: 1; }
+  10% { transform: translateX(calc(100vw + 100px)) translateY(200px) rotate(-25deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* ============================================
+   GLASSMORPHISM CARDS
+   ============================================ */
 .bg-app { background-color: var(--app-color); }
 .text-app { color: #fff; }
-.border-app { border-color: rgba(255,255,255,0.25); }
+.border-app { border-color: var(--glass-border); }
+
 .card-light {
-  background: var(--app-color);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
 }
 
 /* --- Layout Reset --- */
@@ -60,6 +279,7 @@ body {
   color: #fff;
   padding-top: var(--safe-area-top);
   padding-bottom: var(--safe-area-bottom);
+  transition: background-color 0.6s ease;
 }
 
 /* Responsive Container */
@@ -99,7 +319,7 @@ ion-page#main-page {
 
 .single-page-inner {
   max-width: 100%;
-  padding: 0 1rem 2rem;
+  padding: 0 0.85rem 2rem;
   padding-bottom: max(4rem, env(safe-area-inset-bottom, 0px) + 2.5rem);
   display: flex;
   flex-direction: column;
@@ -110,20 +330,21 @@ ion-page#main-page {
 
 .hero-compact {
   min-height: auto;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
   padding-bottom: 0.5rem;
 }
 
 .single-page-details {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 ion-toolbar {
-  --background: var(--app-color);
+  --background: transparent;
   --color: #fff;
-  --border-color: rgba(255,255,255,0.2);
+  --border-color: transparent;
 }
 
 ion-title, ion-button {
@@ -131,34 +352,46 @@ ion-title, ion-button {
 }
 ion-title { font-weight: 600; }
 
-/* Header search & settings buttons – pill style */
-ion-toolbar .header-btn.ion-button {
-  --background: rgba(255, 255, 255, 0.12);
-  --background-hover: rgba(255, 255, 255, 0.22);
-  --background-activated: rgba(255, 255, 255, 0.18);
-  --color: #fff;
-  --border-radius: 50%;
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  margin: 0 4px;
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+/* Header buttons – clean icon only, no box */
+ion-toolbar .header-btn {
+  --background: transparent !important;
+  --background-hover: transparent !important;
+  --background-activated: transparent !important;
+  --background-focused: transparent !important;
+  --box-shadow: none !important;
+  --border-width: 0 !important;
+  --border-style: none !important;
+  --border-color: transparent !important;
+  --border-radius: 0 !important;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --ripple-color: transparent;
+  --color: rgba(255, 255, 255, 0.85);
+  margin: 0 2px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
 }
-ion-toolbar .header-btn.ion-button ion-icon {
-  font-size: 22px;
+ion-toolbar .header-btn::part(native) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px;
 }
-ion-toolbar .header-btn.ion-button:hover {
-  --background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.4);
+ion-toolbar .header-btn ion-icon {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.85);
 }
-ion-toolbar .header-btn.ion-button:active {
-  transform: scale(0.95);
+ion-toolbar .header-btn:hover ion-icon {
+  color: #fff;
+}
+ion-toolbar .header-btn:active {
+  opacity: 0.7;
 }
 
 @media (min-width: 1024px) {
@@ -167,7 +400,7 @@ ion-toolbar .header-btn.ion-button:active {
   }
 }
 
-/* One color for whole site */
+/* Background is now managed by .app-background-el class */
 #app-background {
   position: fixed;
   top: 0;
@@ -175,7 +408,6 @@ ion-toolbar .header-btn.ion-button:active {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: var(--app-color);
 }
 
 /* Main Layout Container */
@@ -193,13 +425,16 @@ ion-toolbar .header-btn.ion-button:active {
 
 /* iOS Glass Card */
 .ios-card {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--card-radius);
   padding: 16px;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .ios-card-header {
@@ -226,6 +461,19 @@ ion-toolbar .header-btn.ion-button:active {
   /* Consistent spacing */
 }
 
+.hero-weather-icon {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
+}
+@media (min-width: 640px) {
+  .hero-weather-icon {
+    width: 108px;
+    height: 108px;
+  }
+}
+
 .hero-city {
   font-family: 'Inter', sans-serif;
   font-size: 1.8rem;
@@ -236,17 +484,16 @@ ion-toolbar .header-btn.ion-button:active {
 
 .hero-temp {
   font-family: 'Inter', sans-serif;
-  font-size: 5rem;
-  /* Reduced from 6rem */
-  font-weight: 300;
-  /* Light weight for elegance */
+  font-size: 5.5rem;
+  font-weight: 200;
   line-height: 1;
   letter-spacing: -0.04em;
   margin: 0;
-  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.15));
+  text-shadow: none;
 }
 
 .hero-desc {
@@ -266,65 +513,9 @@ ion-toolbar .header-btn.ion-button:active {
   margin-top: 4px;
 }
 
-/* Hourly Forecast (Horizontal Scroll) */
-.hourly-scroll {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding-bottom: 8px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
+/* (Hourly styles moved to bottom of file) */
 
-.hourly-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.hourly-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 50px;
-  gap: 8px;
-}
-
-/* Daily Forecast (Vertical List) */
-.daily-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.daily-row:last-child {
-  border-bottom: none;
-}
-
-.daily-day {
-  flex: 1;
-  font-weight: 500;
-  font-size: 1.1rem;
-}
-
-.daily-icon {
-  flex: 1;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
-.daily-temps {
-  flex: 1;
-  display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-  font-weight: 600;
-}
-
-.temp-min {
-  opacity: 0.6;
-}
+/* (Daily styles moved to bottom of file) */
 
 /* Grid Layout for Details */
 .details-grid {
@@ -388,15 +579,15 @@ button {
 }
 
 
-/* Premium Card (Solid Matte) */
+/* Premium Card (Glassmorphism) */
 .premium-card {
-  background: linear-gradient(145deg, #1e293b, #0f172a);
-  /* Slate 800 -> Slate 900 */
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   /* Inner highlight for depth */
   color: white;
@@ -892,3 +1083,540 @@ ion-toolbar {
     transform: scale(1);
   }
 }
+
+/* ============================================
+   GLASSMORPHISM PREMIUM CARD
+   ============================================ */
+.premium-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--card-radius);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   THEME PICKER BUTTONS
+   ============================================ */
+.theme-pick-btn {
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-pick-btn:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   SECTION LABELS (card headers)
+   ============================================ */
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+/* ============================================
+   HOURLY FORECAST (horizontal scroll)
+   ============================================ */
+.hourly-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 4px;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hourly-scroll::-webkit-scrollbar { display: none; }
+
+.hourly-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+  flex-shrink: 0;
+  padding: 6px 4px;
+  border-radius: 14px;
+  transition: background 0.2s ease;
+}
+.hourly-item:hover { background: rgba(255,255,255,0.08); }
+
+.hourly-time {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 4px;
+}
+.hourly-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 2px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.hourly-item:hover .hourly-icon {
+  transform: scale(1.12);
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
+}
+.hourly-icon-svg {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hourly-temp {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+.hourly-rain {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 3px;
+}
+
+/* ============================================
+   DAILY / 7-DAY FORECAST
+   ============================================ */
+.daily-list {
+  display: flex;
+  flex-direction: column;
+}
+.daily-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px;
+}
+.daily-row-border {
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.daily-day {
+  width: 48px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.daily-icon-img {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.08));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.daily-row:hover .daily-icon-img {
+  transform: scale(1.12);
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+}
+.daily-icon-svg {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.daily-min {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.50);
+  width: 40px;
+  text-align: right;
+}
+.daily-max {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+  width: 40px;
+  text-align: right;
+}
+
+/* ============================================
+   METRIC CARDS (3-col grid)
+   ============================================ */
+.metric-card {
+  background: rgba(255,255,255,0.13);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 18px;
+  padding: 14px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+.metric-icon-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(255, 255, 255, 0.1));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.metric-card:hover .metric-icon-img {
+  transform: scale(1.15);
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+}
+.metric-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.6);
+}
+.metric-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.metric-value-sm {
+  font-size: 0.82rem;
+}
+.metric-unit {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ============================================
+   SUNRISE / SUNSET BAR
+   ============================================ */
+.sr-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+}
+.sr-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-bottom: 4px;
+  filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
+}
+.sr-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+.sr-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   ENHANCED ANIMATIONS
+   ============================================ */
+@keyframes gentleGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.03); }
+  50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.06); }
+}
+
+/* ============================================
+   THEMED OVERLAY BACKGROUNDS
+   Overlay pages (search, settings, side menu) inherit theme
+   ============================================ */
+.themed-overlay-bg {
+  backdrop-filter: blur(60px) saturate(1.6);
+  -webkit-backdrop-filter: blur(60px) saturate(1.6);
+}
+
+/* Each theme gives overlays a matching tinted background */
+.themed-overlay-bg.overlay-bg-celestial,
+.side-menu-bg.overlay-bg-celestial {
+  background: linear-gradient(160deg, rgba(15,10,46,0.92) 0%, rgba(45,27,105,0.88) 50%, rgba(19,13,51,0.92) 100%);
+}
+.themed-overlay-bg.overlay-bg-twilight,
+.side-menu-bg.overlay-bg-twilight {
+  background: linear-gradient(160deg, rgba(25,10,48,0.92) 0%, rgba(85,25,90,0.88) 50%, rgba(35,15,55,0.92) 100%);
+}
+.themed-overlay-bg.overlay-bg-sunset,
+.side-menu-bg.overlay-bg-sunset {
+  background: linear-gradient(160deg, rgba(45,15,35,0.92) 0%, rgba(120,40,30,0.88) 50%, rgba(50,18,40,0.92) 100%);
+}
+.themed-overlay-bg.overlay-bg-aurora,
+.side-menu-bg.overlay-bg-aurora {
+  background: linear-gradient(160deg, rgba(5,25,35,0.92) 0%, rgba(10,60,60,0.88) 50%, rgba(5,20,30,0.92) 100%);
+}
+.themed-overlay-bg.overlay-bg-ocean,
+.side-menu-bg.overlay-bg-ocean {
+  background: linear-gradient(160deg, rgba(5,15,40,0.92) 0%, rgba(15,50,100,0.88) 50%, rgba(5,12,35,0.92) 100%);
+}
+
+/* ============================================
+   MOBILE / DESKTOP VISIBILITY HELPERS
+   ============================================ */
+.mobile-only { display: flex; }
+.desktop-only { display: none; }
+
+@media (min-width: 768px) {
+  .mobile-only { display: none !important; }
+  .desktop-only { display: flex !important; }
+}
+
+/* ============================================
+   SIDE MENU (Mobile Drawer)
+   ============================================ */
+.side-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.side-menu-overlay.open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 82%;
+  max-width: 340px;
+  height: 100%;
+  z-index: 999;
+  transform: translateX(-105%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu-bg {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(60px) saturate(1.8);
+  -webkit-backdrop-filter: blur(60px) saturate(1.8);
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.side-menu-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.side-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.side-menu-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.side-menu-items {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.side-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+.side-menu-item:hover,
+.side-menu-item:active {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.side-menu-item ion-icon {
+  color: rgba(255,255,255,0.6);
+  transition: color 0.2s;
+}
+.side-menu-item:hover ion-icon {
+  color: rgba(255,255,255,0.9);
+}
+
+.side-menu-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+
+/* Hide side menu completely on desktop */
+@media (min-width: 768px) {
+  .side-menu,
+  .side-menu-overlay {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   DESKTOP ENHANCED HEADER BUTTONS
+   ============================================ */
+@media (min-width: 768px) {
+  .header-btn {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --border-radius: 14px;
+    font-size: 1.1rem;
+    transition: all 0.25s ease;
+  }
+  .header-btn::part(native) {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    transition: all 0.25s ease;
+  }
+  .header-btn:hover::part(native) {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   OVERLAY ICON BUTTONS (Search/Settings header)
+   ============================================ */
+.overlay-icon-btn {
+  transition: all 0.2s ease;
+}
+@media (min-width: 768px) {
+  .overlay-icon-btn {
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .overlay-icon-btn:hover {
+    background: rgba(255,255,255,0.18) !important;
+    border-color: rgba(255,255,255,0.25);
+    transform: scale(1.04);
+  }
+}
+
+/* ============================================
+   SETTINGS OVERLAY DESKTOP ENHANCEMENTS
+   ============================================ */
+@media (min-width: 768px) {
+  .settings-overlay {
+    /* Override translate-x to use opacity/scale for desktop */
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+    transform: none !important;
+  }
+  .settings-overlay.translate-x-full {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .settings-overlay.translate-x-0 {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .settings-overlay .settings-overlay-inner,
+  .settings-overlay .themed-overlay-bg {
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+  }
+
+  .search-overlay {
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+    transform: none !important;
+  }
+  .search-overlay.translate-x-full {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .search-overlay.translate-x-0 {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .search-overlay .search-overlay-inner,
+  .search-overlay .themed-overlay-bg {
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+  }
+}
+
+/* ============================================
+   SEARCH & SETTINGS ANIMATED LIST ITEMS
+   ============================================ */
+.data-city-item,
+#favorites-list > div {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.data-city-item:hover,
+#favorites-list > div:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateX(4px);
+}
+
+/* Improve scrollbar in dark themes */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }

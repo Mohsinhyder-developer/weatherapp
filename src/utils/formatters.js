@@ -1,13 +1,20 @@
 // Utility functions for data formatting
 export const formatters = {
+    _timeFormat: '12h',
+
+    setTimeFormat(fmt) {
+      this._timeFormat = fmt;
+    },
+
     /**
-     * Format timestamp to time (e.g., "2:30 PM")
+     * Format timestamp to time (e.g., "2:30 PM" or "14:30")
      */
     formatTime(date) {
+        const is24 = this._timeFormat === '24h';
         return new Date(date).toLocaleTimeString('en-US', {
-            hour: 'numeric',
+            hour: is24 ? '2-digit' : 'numeric',
             minute: '2-digit',
-            hour12: true
+            hour12: !is24
         });
     },
 

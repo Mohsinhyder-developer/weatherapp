@@ -49,17 +49,17 @@ function sunIcon(size = 48) {
     </defs>
     <g filter="url(#g-${id})">
       <!-- Sun circle -->
-      <circle cx="32" cy="32" r="10" stroke="#f0c878" stroke-width="1.8" fill="none" class="w-anim-pulse-soft"/>
+      <circle cx="32" cy="32" r="10" stroke="#FFD700" stroke-width="1.8" fill="#FFD700" fill-opacity="0.9" class="w-anim-pulse-soft"/>
       <!-- Rays -->
       <g class="w-anim-spin-slow" style="transform-origin:32px 32px">
-        <line x1="32" y1="8" x2="32" y2="15" stroke="#f0c878" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
-        <line x1="32" y1="49" x2="32" y2="56" stroke="#f0c878" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
-        <line x1="8" y1="32" x2="15" y2="32" stroke="#f0c878" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
-        <line x1="49" y1="32" x2="56" y2="32" stroke="#f0c878" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
-        <line x1="14.3" y1="14.3" x2="19.2" y2="19.2" stroke="#f0c878" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
-        <line x1="44.8" y1="44.8" x2="49.7" y2="49.7" stroke="#f0c878" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
-        <line x1="49.7" y1="14.3" x2="44.8" y2="19.2" stroke="#f0c878" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
-        <line x1="19.2" y1="44.8" x2="14.3" y2="49.7" stroke="#f0c878" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+        <line x1="32" y1="8" x2="32" y2="15" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+        <line x1="32" y1="49" x2="32" y2="56" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+        <line x1="8" y1="32" x2="15" y2="32" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+        <line x1="49" y1="32" x2="56" y2="32" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+        <line x1="14.3" y1="14.3" x2="19.2" y2="19.2" stroke="#FFD700" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+        <line x1="44.8" y1="44.8" x2="49.7" y2="49.7" stroke="#FFD700" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+        <line x1="49.7" y1="14.3" x2="44.8" y2="19.2" stroke="#FFD700" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
+        <line x1="19.2" y1="44.8" x2="14.3" y2="49.7" stroke="#FFD700" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>
       </g>
     </g>
   </svg>`;
@@ -74,12 +74,17 @@ function moonIcon(size = 48) {
       </filter>
     </defs>
     <g filter="url(#g-${id})" class="w-anim-float">
-      <!-- Crescent moon -->
-      <path d="M36 12a20 20 0 1 0 0 40 16 16 0 0 1 0-40z" stroke="#d4e5ff" stroke-width="1.8" fill="none"/>
+      <!-- Crescent moon (grayish filled) -->
+      <path d="M36 12a20 20 0 1 0 0 40 16 16 0 0 1 0-40z" stroke="#c8cbd0" stroke-width="1.2" fill="#b8bcc2" fill-opacity="0.85"/>
+      <!-- Craters -->
+      <circle cx="28" cy="28" r="2.5" fill="#9ea3a9" opacity="0.5"/>
+      <circle cx="34" cy="38" r="1.8" fill="#9ea3a9" opacity="0.4"/>
+      <circle cx="24" cy="38" r="1.3" fill="#9ea3a9" opacity="0.35"/>
+      <circle cx="30" cy="22" r="1" fill="#9ea3a9" opacity="0.3"/>
       <!-- Small stars -->
-      <circle cx="18" cy="18" r="1" fill="#d4e5ff" opacity="0.6" class="w-anim-twinkle"/>
-      <circle cx="14" cy="30" r="0.8" fill="#d4e5ff" opacity="0.4" class="w-anim-twinkle" style="animation-delay:0.8s"/>
-      <circle cx="22" cy="12" r="0.6" fill="#d4e5ff" opacity="0.5" class="w-anim-twinkle" style="animation-delay:1.5s"/>
+      <circle cx="18" cy="18" r="1" fill="#fffbe6" opacity="0.6" class="w-anim-twinkle"/>
+      <circle cx="14" cy="30" r="0.8" fill="#fffbe6" opacity="0.4" class="w-anim-twinkle" style="animation-delay:0.8s"/>
+      <circle cx="22" cy="12" r="0.6" fill="#fffbe6" opacity="0.5" class="w-anim-twinkle" style="animation-delay:1.5s"/>
     </g>
   </svg>`;
 }
@@ -110,10 +115,10 @@ function fewCloudsDay(size = 48) {
     <g filter="url(#g-${id})">
       <!-- Sun peeking -->
       <g class="w-anim-pulse-soft">
-        <circle cx="22" cy="22" r="8" stroke="#f0c878" stroke-width="1.5" fill="none"/>
-        <line x1="22" y1="8" x2="22" y2="12" stroke="#f0c878" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
-        <line x1="8" y1="22" x2="12" y2="22" stroke="#f0c878" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
-        <line x1="11.2" y1="11.2" x2="14.6" y2="14.6" stroke="#f0c878" stroke-width="1.1" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="22" cy="22" r="8" stroke="#FFD700" stroke-width="1.5" fill="#FFD700" fill-opacity="0.85"/>
+        <line x1="22" y1="8" x2="22" y2="12" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="8" y1="22" x2="12" y2="22" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="11.2" y1="11.2" x2="14.6" y2="14.6" stroke="#FFD700" stroke-width="1.1" stroke-linecap="round" opacity="0.5"/>
       </g>
       <!-- Cloud in front -->
       <g class="w-anim-drift">
@@ -135,7 +140,9 @@ function fewCloudsNight(size = 48) {
     <g filter="url(#g-${id})">
       <!-- Moon peeking -->
       <g class="w-anim-float">
-        <path d="M28 10a14 14 0 1 0 0 24 11 11 0 0 1 0-24z" stroke="#d4e5ff" stroke-width="1.4" fill="none" opacity="0.7"/>
+        <path d="M28 10a14 14 0 1 0 0 24 11 11 0 0 1 0-24z" stroke="#c8cbd0" stroke-width="1.2" fill="#b8bcc2" fill-opacity="0.8"/>
+        <circle cx="22" cy="20" r="1.5" fill="#9ea3a9" opacity="0.4"/>
+        <circle cx="18" cy="27" r="1" fill="#9ea3a9" opacity="0.35"/>
       </g>
       <!-- Cloud in front -->
       <g class="w-anim-drift">

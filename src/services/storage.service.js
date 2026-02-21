@@ -7,7 +7,16 @@ const DB_VERSION = 1;
 class StorageService {
     constructor() {
         this.db = null;
-        this.initDB();
+        this._dbReady = this.initDB();
+    }
+
+    /**
+     * Ensure DB is initialized before use
+     */
+    async ensureDB() {
+        if (!this.db) {
+            await this._dbReady;
+        }
     }
 
     /**
@@ -41,6 +50,7 @@ class StorageService {
      */
     async saveWeatherData(location, data) {
         try {
+            await this.ensureDB();
             await this.db.put('weather', {
                 id: `${location.lat},${location.lon}`,
                 data,
@@ -56,6 +66,7 @@ class StorageService {
      */
     async getCachedWeatherData(location, maxAge = 600000) { // 10 minutes default
         try {
+            await this.ensureDB();
             const cached = await this.db.get('weather', `${location.lat},${location.lon}`);
 
             if (cached && (Date.now() - cached.timestamp) < maxAge) {
@@ -74,6 +85,7 @@ class StorageService {
      */
     async saveFavorite(city) {
         try {
+            await this.ensureDB();
             const id = `${city.lat},${city.lon}`;
             await this.db.put('favorites', {
                 id,
@@ -92,6 +104,7 @@ class StorageService {
     async removeFavorite(city) {
         try {
             const id = `${city.lat},${city.lon}`;
+            await this.ensureDB();
             await this.db.delete('favorites', id);
         } catch (error) {
             console.error('Error removing favorite:', error);
@@ -104,6 +117,7 @@ class StorageService {
      */
     async getAllFavorites() {
         try {
+            await this.ensureDB();
             const favorites = await this.db.getAllFromIndex('favorites');
             return favorites || [];
         } catch (error) {
@@ -125,6 +139,7 @@ class StorageService {
      */
     async isFavorite(city) {
         try {
+            await this.ensureDB();
             const id = `${city.lat},${city.lon}`;
             const favorite = await this.db.get('favorites', id);
             return !!favorite;
@@ -140,9 +155,7 @@ class StorageService {
     async savePreference(key, value) {
         try {
             // Wait for db to be ready
-            if (!this.db) {
-                await this.initDB();
-            }
+            await this.ensureDB();
 
             if (this.db) {
                 await this.db.put('preferences', { key, value });
@@ -166,12 +179,8 @@ class StorageService {
                 return JSON.parse(localValue);
             }
 
-            // Wait for db to be ready
-            if (!this.db) {
-                await this.initDB();
-            }
-
             // Fall back to IndexedDB
+            await this.ensureDB();
             if (this.db) {
                 const pref = await this.db.get('preferences', key);
                 return pref ? pref.value : defaultValue;
@@ -189,6 +198,7 @@ class StorageService {
      */
     async getAllPreferences() {
         try {
+            await this.ensureDB();
             const tx = this.db.transaction('preferences', 'readonly');
             const store = tx.objectStore('preferences');
             const prefs = await store.getAll();
@@ -206,10 +216,43 @@ class StorageService {
     }
 
     /**
+     * Save a daily weather snapshot for comparison
+     */
+    async saveWeatherSnapshot(data) {
+        try {
+            await this.ensureDB();
+            const today = new Date().toISOString().slice(0, 10);
+            await this.db.put('weather', {
+                id: `snapshot_${today}`,
+                data,
+                timestamp: Date.now()
+            });
+        } catch (e) {
+            console.error('Error saving weather snapshot:', e);
+        }
+    }
+
+    /**
+     * Get yesterday's weather snapshot for comparison
+     */
+    async getYesterdayWeather() {
+        try {
+            await this.ensureDB();
+            const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+            const snap = await this.db.get('weather', `snapshot_${yesterday}`);
+            return snap?.data || null;
+        } catch (e) {
+            console.error('Error getting yesterday weather:', e);
+            return null;
+        }
+    }
+
+    /**
      * Clear all cached weather data
      */
     async clearWeatherCache() {
         try {
+            await this.ensureDB();
             const tx = this.db.transaction('weather', 'readwrite');
             await tx.objectStore('weather').clear();
         } catch (error) {
@@ -222,6 +265,7 @@ class StorageService {
      */
     async clearAll() {
         try {
+            await this.ensureDB();
             await this.db.clear('weather');
             await this.db.clear('favorites');
             await this.db.clear('preferences');

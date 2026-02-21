@@ -465,7 +465,7 @@ ion-toolbar .header-btn:active {
   width: 88px;
   height: 88px;
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
 }
 @media (min-width: 640px) {
   .hero-weather-icon {
@@ -1160,12 +1160,12 @@ ion-toolbar {
   height: 48px;
   margin-bottom: 2px;
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 .hourly-item:hover .hourly-icon {
   transform: scale(1.12);
-  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
 }
 .hourly-icon-svg {
   width: 36px;
@@ -1218,12 +1218,12 @@ ion-toolbar {
   height: 42px;
   flex-shrink: 0;
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.08));
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.08));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 .daily-row:hover .daily-icon-img {
   transform: scale(1.12);
-  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
 }
 .daily-icon-svg {
   width: 30px;
@@ -1277,12 +1277,12 @@ ion-toolbar {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(255, 255, 255, 0.1));
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.1));
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 .metric-card:hover .metric-icon-img {
   transform: scale(1.15);
-  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
 }
 .metric-label {
   font-size: 0.6rem;
@@ -1322,7 +1322,7 @@ ion-toolbar {
   height: 40px;
   object-fit: contain;
   margin-bottom: 4px;
-  filter: brightness(0) invert(1) drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.1));
 }
 .sr-value {
   font-size: 1.3rem;
@@ -1620,3 +1620,884 @@ ion-toolbar {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+
+/* ============================================
+   WEATHER ALERTS
+   ============================================ */
+.weather-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 0 12px 8px;
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: slideDown 0.4s ease;
+}
+.weather-alert-danger {
+  background: rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+.weather-alert-warning {
+  background: rgba(249, 115, 22, 0.2);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+}
+.weather-alert-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.weather-alert-danger .weather-alert-icon { color: #f87171; }
+.weather-alert-warning .weather-alert-icon { color: #fb923c; }
+.weather-alert-body { flex: 1; }
+.weather-alert-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.weather-alert-msg {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.4;
+}
+.weather-alert-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+.weather-alert-close:hover { color: #fff; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   FEELS-LIKE CONTEXT CARD
+   ============================================ */
+.feels-context {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.feels-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.feels-icon {
+  font-size: 2rem;
+  color: rgba(255,255,255,0.8);
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 14px;
+}
+.feels-feeling {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.feels-advice {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.4;
+}
+.feels-tips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.feels-tip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+.feels-tip ion-icon {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ============================================
+   WIND COMPASS
+   ============================================ */
+.wind-compass-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.wind-compass-svg {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wind-compass-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wind-compass-speed {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+}
+.wind-compass-dir {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+.wind-compass-label {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================
+   AIR QUALITY DETAILS
+   ============================================ */
+.aqi-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.aqi-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.aqi-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000;
+  flex-shrink: 0;
+}
+.aqi-desc { flex: 1; }
+.aqi-level {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.aqi-health {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+}
+.aqi-bar-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.aqi-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+.aqi-components {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.aqi-comp {
+  flex: 1;
+  min-width: 50px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.aqi-comp-label {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.aqi-comp-val {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ============================================
+   MOON PHASE WIDGET
+   ============================================ */
+.moon-phase-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.moon-phase-svg {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.moon-phase-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.moon-phase-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+.moon-phase-illum {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+}
+.moon-phase-times {
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.55);
+}
+.moon-phase-times span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.moon-phase-times ion-icon {
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   UV INDEX GAUGE
+   ============================================ */
+.uv-gauge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.uv-gauge-svg {
+  width: 160px;
+  height: auto;
+}
+.uv-gauge-tip {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ============================================
+   SUNRISE/SUNSET ARC
+   ============================================ */
+.sun-arc-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 0;
+}
+.sun-arc-svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+/* ============================================
+   ACTIVITY SUGGESTIONS
+   ============================================ */
+.activity-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.activity-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+.activity-chip:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-1px);
+}
+.activity-emoji {
+  font-size: 1.1rem;
+}
+.activity-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ============================================
+   WEATHER COMPARISON (vs. Yesterday)
+   ============================================ */
+.comparison-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.comparison-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.comparison-item ion-icon {
+  font-size: 1rem;
+}
+.comparison-warm { background: rgba(251,191,36,0.15); color: #fbbf24; border-color: rgba(251,191,36,0.25); }
+.comparison-cool { background: rgba(96,165,250,0.15); color: #60a5fa; border-color: rgba(96,165,250,0.25); }
+.comparison-same { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+.comparison-humid { background: rgba(96,165,250,0.12); color: #93c5fd; }
+.comparison-dry { background: rgba(251,191,36,0.1); color: #fcd34d; }
+.comparison-windy { background: rgba(248,113,113,0.12); color: #fca5a5; }
+.comparison-calm { background: rgba(74,222,128,0.12); color: #86efac; }
+
+/* ============================================
+   MULTI-CITY STRIP
+   ============================================ */
+.multi-city-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.multi-city-strip::-webkit-scrollbar { display: none; }
+.multi-city-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 72px;
+  flex-shrink: 0;
+}
+.multi-city-chip:hover {
+  background: rgba(255,255,255,0.16);
+  transform: translateY(-2px);
+}
+.multi-city-icon {
+  width: 28px;
+  height: 28px;
+}
+.multi-city-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+.multi-city-temp {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: white;
+}
+
+/* ============================================
+   VOICE SEARCH BUTTON
+   ============================================ */
+.voice-search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.voice-search-btn:hover {
+  color: white !important;
+  background: rgba(255,255,255,0.1);
+}
+.voice-listening {
+  animation: voice-pulse 1s ease infinite;
+  color: #ef4444 !important;
+}
+@keyframes voice-pulse {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.2); }
+}
+
+/* ============================================
+   HOURLY "NOW" INDICATOR
+   ============================================ */
+.hourly-now {
+  position: relative;
+}
+.hourly-now-dot {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #60a5fa;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(96,165,250,0.6);
+  animation: now-pulse 2s ease infinite;
+}
+@keyframes now-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(96,165,250,0.4); }
+  50% { box-shadow: 0 0 10px rgba(96,165,250,0.8); }
+}
+.hourly-now .hourly-time {
+  color: #60a5fa !important;
+  font-weight: 800 !important;
+}
+
+/* ============================================
+   GESTURE NAVIGATION TRANSITIONS
+   ============================================ */
+.slide-out-left {
+  animation: slideOutLeft 0.25s ease forwards;
+}
+.slide-out-right {
+  animation: slideOutRight 0.25s ease forwards;
+}
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-60px); }
+}
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(60px); }
+}
+
+/* ============================================
+   ANIMATED BACKGROUND TRANSITIONS
+   ============================================ */
+.app-background-el {
+  transition: background 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+}
+
+/* ============================================
+   WEATHER CONTENT TRANSITION
+   ============================================ */
+.single-page-inner {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.single-page-inner.refreshing {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================
+   SETTINGS CHIPS
+   ============================================ */
+.settings-chip {
+  padding: 8px 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.settings-chip:hover {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+}
+.settings-chip-active {
+  background: rgba(255,255,255,0.2) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+body.high-contrast {
+  --hc-text: rgba(255,255,255,1);
+  --hc-border: rgba(255,255,255,0.4);
+}
+body.high-contrast .card-light {
+  background: rgba(0,0,0,0.5) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+body.high-contrast .section-label {
+  color: #fff !important;
+  font-weight: 800 !important;
+}
+body.high-contrast .metric-label,
+body.high-contrast .metric-value,
+body.high-contrast .sr-label,
+body.high-contrast .sr-value,
+body.high-contrast .hourly-time,
+body.high-contrast .hourly-temp,
+body.high-contrast .daily-day,
+body.high-contrast .daily-desc-text {
+  color: #fff !important;
+}
+body.high-contrast .hero-temp {
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+body.high-contrast .feels-feeling,
+body.high-contrast .feels-advice,
+body.high-contrast .moon-phase-name,
+body.high-contrast .wind-compass-speed,
+body.high-contrast .wind-compass-dir {
+  color: #fff !important;
+}
+body.high-contrast ion-toolbar {
+  --background: rgba(0,0,0,0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.3) !important;
+}
+body.high-contrast .aqi-health,
+body.high-contrast .aqi-comp-label,
+body.high-contrast .aqi-comp-val {
+  color: rgba(255,255,255,0.9) !important;
+}
+body.high-contrast .daily-row {
+  border-color: rgba(255,255,255,0.25) !important;
+}
+body.high-contrast .activity-text,
+body.high-contrast .comparison-item {
+  color: #fff !important;
+}
+
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.06) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+   PULL TO REFRESH
+   ============================================ */
+.pull-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(0);
+  pointer-events: none;
+}
+.pull-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: transform 0.1s ease;
+}
+
+/* ============================================
+   WEATHER PARTICLES CANVAS
+   ============================================ */
+.weather-particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   OFFLINE BANNER
+   ============================================ */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(239, 68, 68, 0.92);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  animation: slideDown 0.3s ease;
+}
+.offline-banner.hidden { display: none; }
+.offline-banner ion-icon { font-size: 1rem; }
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.app-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  z-index: 99999;
+  padding: 12px 24px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  backdrop-filter: blur(12px);
+  transition: transform 0.35s cubic-bezier(.22,.68,0,1.1), opacity 0.35s ease;
+  opacity: 0;
+  white-space: nowrap;
+  max-width: 90vw;
+}
+.app-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ============================================
+   PRECIPITATION TIMELINE
+   ============================================ */
+.precip-timeline {
+  padding-top: 4px;
+}
+.precip-bars {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  height: 70px;
+}
+.precip-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.precip-bar {
+  width: 100%;
+  min-height: 3px;
+  border-radius: 6px 6px 2px 2px;
+  transition: height 0.6s cubic-bezier(.22,.68,0,1.1);
+}
+.precip-bar-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(96,165,250,0.9);
+}
+.precip-bar-time {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.45);
+  text-transform: lowercase;
+}
+
+/* ============================================
+   EXPANDABLE DAILY FORECAST
+   ============================================ */
+.daily-row-wrap {
+  overflow: hidden;
+}
+.daily-row-expandable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  padding: 10px 4px;
+}
+.daily-row-expandable:hover {
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+.daily-desc-text {
+  flex: 1;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.daily-temp-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 100px;
+}
+.daily-range-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+  min-width: 40px;
+}
+.daily-range-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, rgba(96,165,250,0.8), rgba(250,204,21,0.8));
+}
+.daily-expand-icon {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.35);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.daily-expand-icon.rotated {
+  transform: rotate(180deg);
+}
+.daily-expand-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(.22,.68,0,1.1);
+}
+.daily-expand-content.open {
+  max-height: 120px;
+}
+.daily-expand-inner {
+  padding: 8px 8px 12px 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.daily-expand-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.7);
+}
+.daily-expand-detail ion-icon {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================
+   CHART CONTAINER
+   ============================================ */
+.chart-container {
+  position: relative;
+  height: 180px;
+  width: 100%;
+}
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ============================================
+   PRESSURE TREND INDICATOR
+   ============================================ */
+.pressure-trend {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.pressure-rising { color: #4ade80; }
+.pressure-falling { color: #f87171; }
+.pressure-steady { color: rgba(255,255,255,0.5); }
+
+/* ============================================
+   DESKTOP 2-COLUMN GRID LAYOUT
+   ============================================ */
+@media (min-width: 768px) {
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  /* Let full-width sections span both columns */
+  .desktop-grid > section:first-child,
+  .desktop-grid > section:nth-child(3),
+  .desktop-grid > section:nth-child(4),
+  .desktop-grid > section:last-child {
+    grid-column: 1 / -1;
+  }
+  /* The metrics grid and charts should also span full */
+  .desktop-grid > .grid {
+    grid-column: 1 / -1;
+  }
+  /* card-light sections that aren't forced full width sit in grid cells */
+  .single-page-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .single-page-inner {
+    max-width: 1100px;
+  }
+}

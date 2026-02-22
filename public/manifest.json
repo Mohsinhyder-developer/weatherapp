@@ -1,29 +1,60 @@
 {
-    "name": "Advanced Weather App",
-    "short_name": "Weather",
-    "description": "Modern weather app with offline support and personalization",
+    "name": "Weather App – Real-Time Weather Forecast, Hourly & 7-Day Predictions",
+    "short_name": "Weather App",
+    "description": "Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index, sunrise & sunset times. Free weather app with offline support, beautiful animations & multi-city tracking.",
     "start_url": "/",
+    "id": "/",
+    "scope": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#0066ff",
+    "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+    "background_color": "#31255a",
+    "theme_color": "#31255a",
     "orientation": "portrait-primary",
+    "lang": "en",
+    "dir": "ltr",
+    "prefer_related_applications": false,
     "icons": [
         {
             "src": "/icons/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
         },
         {
             "src": "/icons/icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "categories": [
         "weather",
-        "lifestyle"
+        "utilities",
+        "lifestyle",
+        "productivity"
     ],
-    "screenshots": []
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Check Current Weather",
+            "short_name": "Current",
+            "description": "View current weather conditions",
+            "url": "/",
+            "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+        }
+    ],
+    "iarc_rating_id": "",
+    "related_applications": []
 }

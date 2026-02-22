@@ -1434,8 +1434,7 @@ data-lat="${city.lat}" data-lon="${city.lon}" data-name="${city.name}" data-coun
     this.renderFavoritesList();
     this.loadWeather();
 
-    // Init pull-to-refresh on mobile
-    setTimeout(() => this.initPullToRefresh(), 500);
+    // Pull-to-refresh disabled
 
     // Init gesture navigation between saved cities
     setTimeout(() => this.initGestureNavigation(), 600);
@@ -1980,53 +1979,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
   }
 
   // ─── PULL TO REFRESH ───
-  initPullToRefresh() {
-    const content = document.querySelector('.single-page-content');
-    if (!content) return;
-
-    let indicator = document.getElementById('pull-indicator');
-    if (!indicator) {
-      indicator = document.createElement('div');
-      indicator.id = 'pull-indicator';
-      indicator.className = 'pull-indicator';
-      indicator.innerHTML = '<div class="pull-spinner"><ion-icon name="refresh"></ion-icon></div><span>Pull to refresh</span>';
-      content.parentElement.insertBefore(indicator, content);
-    }
-
-    content.addEventListener('touchstart', (e) => {
-      if (content.scrollTop <= 0) {
-        this._pullStartY = e.touches[0].clientY;
-        this._isPulling = true;
-      }
-    }, { passive: true });
-
-    content.addEventListener('touchmove', (e) => {
-      if (!this._isPulling) return;
-      const dy = e.touches[0].clientY - this._pullStartY;
-      if (dy > 0 && content.scrollTop <= 0) {
-        const progress = Math.min(dy / 120, 1);
-        indicator.style.transform = `translateY(${Math.min(dy * 0.5, 60)}px)`;
-        indicator.style.opacity = progress;
-        indicator.querySelector('.pull-spinner').style.transform = `rotate(${progress * 360}deg)`;
-        if (progress >= 1) indicator.querySelector('span').textContent = 'Release to refresh';
-        else indicator.querySelector('span').textContent = 'Pull to refresh';
-      }
-    }, { passive: true });
-
-    content.addEventListener('touchend', (e) => {
-      if (!this._isPulling) return;
-      this._isPulling = false;
-      const dy = (e.changedTouches?.[0]?.clientY || 0) - this._pullStartY;
-      indicator.style.transition = 'all 0.3s ease';
-      indicator.style.transform = 'translateY(0)';
-      indicator.style.opacity = '0';
-      setTimeout(() => { indicator.style.transition = ''; }, 300);
-      if (dy > 120) {
-        if (this.preferences.haptic && navigator.vibrate) navigator.vibrate(30);
-        this.loadWeather(true);
-      }
-    }, { passive: true });
-  }
+  // Pull-to-refresh removed
 
   renderCharts() {
     if (!this.currentWeather || !this.currentWeather.hourly) return;

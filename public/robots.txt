@@ -1,0 +1,23 @@
+# robots.txt for Weather App
+# https://weatherapp-puce-eta.vercel.app/
+
+User-agent: *
+Allow: /
+Disallow: /dev-dist/
+Disallow: /src/
+
+# Sitemaps
+Sitemap: https://weatherapp-puce-eta.vercel.app/sitemap.xml
+
+# Crawl-delay (optional, respected by some bots)
+Crawl-delay: 1
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Disallow: /dev-dist/
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+Disallow: /dev-dist/

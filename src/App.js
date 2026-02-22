@@ -612,29 +612,28 @@ class App {
                <div class="splash-ring splash-ring-1"></div>
                <div class="splash-ring splash-ring-2"></div>
                <div class="splash-ring splash-ring-3"></div>
-               <svg class="splash-weather-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <svg class="splash-weather-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <defs>
                    <linearGradient id="sc1" x1="0%" y1="0%" x2="100%" y2="100%">
-                     <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
-                     <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
-                     <stop offset="100%" style="stop-color:#7dd3fc;stop-opacity:1" />
+                     <stop offset="0%" style="stop-color:#7dd3fc;stop-opacity:1" />
+                     <stop offset="40%" style="stop-color:#ffffff;stop-opacity:1" />
+                     <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:1" />
                    </linearGradient>
                    <linearGradient id="sccloud" x1="0%" y1="0%" x2="100%" y2="100%">
                      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
                      <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.7" />
                    </linearGradient>
+                   <filter id="splglow">
+                     <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#0ea5e9" flood-opacity="0.4"/>
+                   </filter>
                  </defs>
-                 <!-- Small cloud accent -->
-                 <ellipse cx="46" cy="22" rx="16" ry="5.5" fill="url(#sccloud)" opacity="0.4"/>
-                 <ellipse cx="30" cy="20" rx="11" ry="4" fill="url(#sccloud)" opacity="0.3"/>
-                 <!-- Bold 8 -->
-                 <text x="40" y="56" text-anchor="middle" font-family="'Inter',system-ui,sans-serif" font-weight="900" font-size="42" fill="url(#sc1)" letter-spacing="-2" opacity="0.95">8</text>
+                 <!-- Cloud accents -->
+                 <ellipse cx="68" cy="18" rx="28" ry="8" fill="url(#sccloud)" opacity="0.3"/>
+                 <ellipse cx="42" cy="15" rx="18" ry="6" fill="url(#sccloud)" opacity="0.2"/>
+                 <!-- "Clim8" text -->
+                 <text x="60" y="54" text-anchor="middle" font-family="'Inter',system-ui,sans-serif" font-weight="900" font-size="32" fill="url(#sc1)" filter="url(#splglow)" letter-spacing="-1" opacity="0.95">Clim8</text>
                  <!-- Tiny sun -->
-                 <circle cx="60" cy="18" r="5" fill="#fbbf24" opacity="0.5"/>
-                 <!-- Thermometer accent -->
-                 <line x1="16" y1="24" x2="16" y2="52" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
-                 <circle cx="16" cy="55" r="3.5" fill="#f87171" opacity="0.6"/>
-                 <line x1="16" y1="36" x2="16" y2="52" stroke="#f87171" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                 <circle cx="104" cy="16" r="5" fill="#fbbf24" opacity="0.45"/>
                </svg>
             </div>
             <div class="splash-title">Clim8</div>

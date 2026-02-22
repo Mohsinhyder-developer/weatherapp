@@ -1,56 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#1e3a5f;stop-opacity:1" />
+      <stop offset="45%" style="stop-color:#1e3a5f;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="eight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7dd3fc;stop-opacity:1" />
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7dd3fc;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:1" />
     </linearGradient>
     <linearGradient id="cloud" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
-      <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.8" />
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.7" />
     </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feGaussianBlur stdDeviation="6" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="softglow">
-      <feGaussianBlur stdDeviation="0.6" result="blur"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+    <filter id="txtShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0ea5e9" flood-opacity="0.5"/>
+    </filter>
   </defs>
-  <!-- Background -->
-  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
   <!-- Subtle atmosphere arcs -->
-  <circle cx="32" cy="64" r="50" fill="none" stroke="rgba(56,189,248,0.08)" stroke-width="1"/>
-  <circle cx="32" cy="64" r="42" fill="none" stroke="rgba(56,189,248,0.06)" stroke-width="0.8"/>
-  <!-- Small cloud accent behind the 8 -->
-  <ellipse cx="38" cy="24" rx="14" ry="5" fill="url(#cloud)" opacity="0.35" filter="url(#softglow)"/>
-  <ellipse cx="24" cy="22" rx="10" ry="3.5" fill="url(#cloud)" opacity="0.25"/>
-  <!-- Big bold "8" — the hero element -->
-  <text x="32" y="48" text-anchor="middle" font-family="'Inter','SF Pro Display',system-ui,sans-serif" font-weight="900" font-size="40" fill="url(#eight)" filter="url(#glow)" letter-spacing="-2">8</text>
-  <!-- Small thermometer accent on left of 8 -->
-  <line x1="13" y1="20" x2="13" y2="44" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="13" cy="46" r="3" fill="#f87171" opacity="0.7"/>
-  <line x1="13" y1="30" x2="13" y2="44" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-  <!-- Temperature tick marks -->
-  <line x1="11" y1="24" x2="15" y2="24" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-  <line x1="11" y1="30" x2="15" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-  <line x1="11" y1="36" x2="15" y2="36" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-  <!-- Small sun accent top-right -->
-  <circle cx="52" cy="14" r="4" fill="#fbbf24" opacity="0.6"/>
-  <g stroke="#fbbf24" stroke-width="0.8" opacity="0.4">
-    <line x1="52" y1="7" x2="52" y2="9"/>
-    <line x1="52" y1="19" x2="52" y2="21"/>
-    <line x1="45" y1="14" x2="47" y2="14"/>
-    <line x1="57" y1="14" x2="59" y2="14"/>
-    <line x1="47" y1="9" x2="48.5" y2="10.5"/>
-    <line x1="55.5" y1="17.5" x2="57" y2="19"/>
-    <line x1="47" y1="19" x2="48.5" y2="17.5"/>
-    <line x1="55.5" y1="10.5" x2="57" y2="9"/>
+  <circle cx="256" cy="520" r="400" fill="none" stroke="rgba(56,189,248,0.07)" stroke-width="6"/>
+  <circle cx="256" cy="520" r="340" fill="none" stroke="rgba(56,189,248,0.05)" stroke-width="4"/>
+  <circle cx="256" cy="520" r="280" fill="none" stroke="rgba(56,189,248,0.03)" stroke-width="3"/>
+  <!-- Cloud accents behind text -->
+  <ellipse cx="310" cy="160" rx="110" ry="38" fill="url(#cloud)" opacity="0.25" filter="url(#softglow)"/>
+  <ellipse cx="190" cy="148" rx="80" ry="28" fill="url(#cloud)" opacity="0.18"/>
+  <ellipse cx="380" cy="175" rx="60" ry="20" fill="url(#cloud)" opacity="0.15"/>
+  <!-- Sun accent top-right -->
+  <circle cx="420" cy="95" r="32" fill="#fbbf24" opacity="0.5" filter="url(#softglow)"/>
+  <g stroke="#fbbf24" stroke-width="4" opacity="0.35" stroke-linecap="round">
+    <line x1="420" y1="52" x2="420" y2="62"/>
+    <line x1="420" y1="128" x2="420" y2="138"/>
+    <line x1="377" y1="95" x2="367" y2="95"/>
+    <line x1="463" y1="95" x2="473" y2="95"/>
+    <line x1="393" y1="68" x2="386" y2="61"/>
+    <line x1="447" y1="122" x2="454" y2="129"/>
+    <line x1="393" y1="122" x2="386" y2="129"/>
+    <line x1="447" y1="68" x2="454" y2="61"/>
+  </g>
+  <!-- "Clim8" — main hero text -->
+  <text x="256" y="340" text-anchor="middle" font-family="'Inter','SF Pro Display','Segoe UI',system-ui,sans-serif" font-weight="900" font-size="155" fill="url(#textGrad)" filter="url(#txtShadow)" letter-spacing="-4">Clim8</text>
+  <!-- Subtle tagline -->
+  <text x="256" y="400" text-anchor="middle" font-family="'Inter','SF Pro Display',system-ui,sans-serif" font-weight="500" font-size="36" fill="rgba(255,255,255,0.45)" letter-spacing="8">WEATHER</text>
+  <!-- Thermometer accent bottom-left -->
+  <g opacity="0.5">
+    <line x1="82" y1="340" x2="82" y2="430" stroke="rgba(255,255,255,0.3)" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="82" cy="440" r="12" fill="#f87171" opacity="0.8"/>
+    <line x1="82" y1="380" x2="82" y2="430" stroke="#f87171" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+    <line x1="74" y1="355" x2="90" y2="355" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+    <line x1="74" y1="375" x2="90" y2="375" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+    <line x1="74" y1="395" x2="90" y2="395" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  </g>
+  <!-- Raindrop accents bottom-right -->
+  <g fill="rgba(56,189,248,0.35)">
+    <path d="M420,390 Q420,380 425,370 Q430,380 430,390 Q430,396 425,398 Q420,396 420,390Z"/>
+    <path d="M442,405 Q442,395 447,385 Q452,395 452,405 Q452,411 447,413 Q442,411 442,405Z" opacity="0.6"/>
+    <path d="M405,415 Q405,408 409,400 Q413,408 413,415 Q413,420 409,421 Q405,420 405,415Z" opacity="0.45"/>
   </g>
 </svg>

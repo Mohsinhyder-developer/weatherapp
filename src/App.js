@@ -1750,7 +1750,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
       // Build comparison HTML asynchronously  
       const comparisonData = this._yesterdayComparison;
       const comparisonHTML = comparisonData ? `
-        <section class="card-light p-4 fade-in" style="animation-delay:0.42s">
+        <section class="card-light fade-in" data-desktop="full" style="animation-delay:0.42s">
           <h2 class="section-label">vs. Yesterday</h2>
           <div class="comparison-card">
             ${comparisonData.items.map(item => `
@@ -1765,7 +1765,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
 
       // Multi-city strip
       const multiCityHTML = this._multiCityData.length > 0 ? `
-        <section class="fade-in" style="animation-delay:0.40s">
+        <section class="fade-in" data-desktop="full" style="animation-delay:0.40s">
           ${this.renderMultiCityStrip(this._multiCityData)}
         </section>
       ` : '';
@@ -1777,7 +1777,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         ${comparisonHTML}
 
         <!-- ★ FEELS-LIKE CONTEXT CARD ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.45s">
+        <section class="card-light fade-in" style="animation-delay:0.45s">
           <h2 class="section-label">How It Feels</h2>
           <div class="feels-context">
             <div class="feels-main">
@@ -1802,13 +1802,13 @@ data-lat="${city.lat}" data-lon="${city.lon}">
 
 
         <!-- ★ PRECIPITATION TIMELINE ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.48s">
+        <section class="card-light fade-in" style="animation-delay:0.48s">
           <h2 class="section-label">Rain Chance — Next 6h</h2>
           ${this.getPrecipTimeline(hourly)}
         </section>
 
         <!-- ★ HOURLY FORECAST with Now indicator ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.5s">
+        <section class="card-light fade-in" data-desktop="full" style="animation-delay:0.5s">
           <h2 class="section-label">Hourly Forecast</h2>
           <div class="hourly-scroll">
             ${(hourly || []).map((h, idx) => `
@@ -1824,7 +1824,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </section>
 
         <!-- ★ 7-DAY FORECAST (expandable) ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.6s">
+        <section class="card-light fade-in" data-desktop="full" style="animation-delay:0.6s">
           <h2 class="section-label">7-Day Forecast</h2>
           <div class="daily-list">
             ${(daily || []).map((d, i) => `
@@ -1852,7 +1852,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </section>
 
         <!-- ★ WIND COMPASS CARD ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.65s">
+        <section class="card-light fade-in" style="animation-delay:0.65s">
           <h2 class="section-label">Wind</h2>
           <div class="wind-compass-card">
             <div class="wind-compass-svg">${this.getWindCompassSVG(current.windDeg || 0, current.windSpeed)}</div>
@@ -1865,7 +1865,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </section>
 
         <!-- ★ METRICS GRID — 4 cols with dew point & pressure trend ★ -->
-        <div class="grid grid-cols-4 gap-2 fade-in" style="animation-delay:0.7s">
+        <div class="grid grid-cols-4 gap-2 fade-in" data-desktop="full" style="animation-delay:0.7s">
           <div class="metric-card">
             <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('humidity')}" class="metric-icon-img" alt="humidity"></div>
             <div class="metric-label">Humidity</div>
@@ -1891,7 +1891,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
 
         <!-- ★ AIR QUALITY DETAILS CARD ★ -->
         ${airQuality ? `
-        <section class="card-light p-4 fade-in" style="animation-delay:0.75s">
+        <section class="card-light fade-in" style="animation-delay:0.75s">
           <h2 class="section-label">Air Quality</h2>
           <div class="aqi-details">
             <div class="aqi-header">
@@ -1915,7 +1915,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </section>` : ''}
 
         <!-- ★ UV INDEX GAUGE ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.76s">
+        <section class="card-light fade-in" style="animation-delay:0.76s">
           <h2 class="section-label">UV Index</h2>
           <div class="uv-gauge-card">
             ${this.getUVGaugeSVG(uv || current.clouds < 30 ? Math.min(Math.round((90 - current.clouds) / 10), 11) : Math.max(1, Math.round((90 - current.clouds) / 15)))}
@@ -1924,7 +1924,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </section>
 
         <!-- ★ SUNRISE/SUNSET ARC ★ -->
-        <div class="card-light p-4 fade-in" style="animation-delay:0.82s">
+        <div class="card-light fade-in" style="animation-delay:0.82s">
           <h2 class="section-label">Sun Tracker</h2>
           <div class="sun-arc-wrapper">
             ${this.getSunArcSVG(current.sunrise, current.sunset)}
@@ -1933,7 +1933,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
         </div>
 
         <!-- ★ MOON PHASE WIDGET ★ -->
-        <section class="card-light p-4 fade-in" style="animation-delay:0.85s">
+        <section class="card-light fade-in" style="animation-delay:0.85s">
           <h2 class="section-label">Moon Phase</h2>
           <div class="moon-phase-card">
             <div class="moon-phase-svg">${this.getMoonPhaseSVG(moonPhase)}</div>

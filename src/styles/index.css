@@ -244,6 +244,7 @@
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 22px;
+  padding: 16px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
@@ -310,6 +311,20 @@ ion-page#main-page {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
+  }
+  /* Center toolbar content to match inner content width */
+  ion-toolbar .toolbar-container,
+  ion-toolbar {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  ion-toolbar .toolbar-container,
+  ion-toolbar {
+    max-width: 1320px;
+    margin: 0 auto;
   }
 }
 
@@ -975,10 +990,6 @@ ion-segment-button {
 
 /* Responsive Adjustments */
 @media (min-width: 768px) {
-  .section-hero {
-    padding: 4rem;
-  }
-
   .section-content {
     padding: 4rem;
   }
@@ -986,24 +997,11 @@ ion-segment-button {
   .slider-nav {
     bottom: 60px;
   }
-
-  /* Tablet Grids */
-  .grid-cols-2 {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
 }
 
 @media (min-width: 1024px) {
-  .section-hero {
-    padding: 6rem;
-  }
-
   .section-content {
     padding: 4rem 6rem;
-  }
-
-  .grid-cols-2 {
-    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
 
@@ -2486,24 +2484,22 @@ body.high-contrast .comparison-item {
     grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
-  /* Full-width sections: multi-city, comparison, hourly, 7-day */
-  .desktop-grid > section:first-child,
-  .desktop-grid > section:nth-child(2),
-  .desktop-grid > section:nth-child(3),
-  .desktop-grid > section:nth-child(5),
-  .desktop-grid > section:nth-child(6) {
+  /* Full-width sections use data attribute instead of fragile nth-child */
+  .desktop-grid > [data-desktop="full"] {
     grid-column: 1 / -1;
   }
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
   .single-page-inner {
-    max-width: 900px;
+    max-width: 1080px;
     margin: 0 auto;
     padding: 0 2rem 2rem;
   }
 
   /* Hero section — bigger on desktop */
+  #hero-weather,
+  .hero-compact,
   .hero-section {
     padding: 3rem 2rem 3.5rem;
   }
@@ -2515,9 +2511,9 @@ body.high-contrast .comparison-item {
     height: 120px;
   }
 
-  /* Cards get more breathing room */
-  .card-light,
-  .ios-card {
+  /* Cards get more breathing room — use higher specificity to beat Tailwind */
+  .desktop-grid .card-light,
+  .desktop-grid .ios-card {
     padding: 20px 24px;
   }
 
@@ -2564,22 +2560,20 @@ body.high-contrast .comparison-item {
     gap: 18px;
   }
   /* Full-width items on large screens */
-  .desktop-grid > section:first-child,
-  .desktop-grid > section:nth-child(2),
-  .desktop-grid > section:nth-child(3),
-  .desktop-grid > section:nth-child(5),
-  .desktop-grid > section:nth-child(6) {
+  .desktop-grid > [data-desktop="full"] {
     grid-column: 1 / -1;
   }
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
   .single-page-inner {
-    max-width: 1280px;
+    max-width: 1320px;
     padding: 0 3rem 2rem;
   }
 
   /* Hero — even bigger on large desktop */
+  #hero-weather,
+  .hero-compact,
   .hero-section {
     padding: 4rem 2rem 4.5rem;
   }
@@ -2597,8 +2591,8 @@ body.high-contrast .comparison-item {
   }
 
   /* Cards — polished look */
-  .card-light,
-  .ios-card {
+  .desktop-grid .card-light,
+  .desktop-grid .ios-card {
     padding: 24px 28px;
     border-radius: 24px;
   }

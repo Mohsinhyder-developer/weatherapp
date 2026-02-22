@@ -12,10 +12,10 @@ export default defineConfig({
             },
             includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'robots.txt', 'sitemap.xml'],
             manifest: {
-                name: 'Cirrus – Real-Time Weather Forecast',
-                short_name: 'Cirrus',
+                name: 'Clim8 – Real-Time Weather Forecast',
+                short_name: 'Clim8',
                 description: 'Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index & more. Free, fast & works offline.',
-                theme_color: '#31255a',
+                theme_color: '#0f172a',
                 // background_color and display removed as per instruction
                 icons: [
                     {

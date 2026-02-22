@@ -615,19 +615,29 @@ class App {
                <svg class="splash-weather-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <defs>
                    <linearGradient id="sc1" x1="0%" y1="0%" x2="100%" y2="100%">
-                     <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
-                     <stop offset="100%" style="stop-color:#c4b5fd;stop-opacity:0.8" />
+                     <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+                     <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+                     <stop offset="100%" style="stop-color:#7dd3fc;stop-opacity:1" />
+                   </linearGradient>
+                   <linearGradient id="sccloud" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+                     <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.7" />
                    </linearGradient>
                  </defs>
-                 <ellipse cx="40" cy="34" rx="24" ry="9" fill="url(#sc1)" opacity="0.9"/>
-                 <ellipse cx="30" cy="38" rx="18" ry="7.5" fill="url(#sc1)" opacity="0.85"/>
-                 <ellipse cx="50" cy="37" rx="16" ry="7" fill="white" opacity="0.8"/>
-                 <ellipse cx="38" cy="31" rx="14" ry="5" fill="white" opacity="0.9"/>
-                 <ellipse cx="55" cy="40" rx="10" ry="3.5" fill="rgba(196,181,253,0.5)" transform="rotate(5,55,40)"/>
-                 <text x="40" y="58" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="16" fill="white" opacity="0.85" letter-spacing="2">C</text>
+                 <!-- Small cloud accent -->
+                 <ellipse cx="46" cy="22" rx="16" ry="5.5" fill="url(#sccloud)" opacity="0.4"/>
+                 <ellipse cx="30" cy="20" rx="11" ry="4" fill="url(#sccloud)" opacity="0.3"/>
+                 <!-- Bold 8 -->
+                 <text x="40" y="56" text-anchor="middle" font-family="'Inter',system-ui,sans-serif" font-weight="900" font-size="42" fill="url(#sc1)" letter-spacing="-2" opacity="0.95">8</text>
+                 <!-- Tiny sun -->
+                 <circle cx="60" cy="18" r="5" fill="#fbbf24" opacity="0.5"/>
+                 <!-- Thermometer accent -->
+                 <line x1="16" y1="24" x2="16" y2="52" stroke="rgba(255,255,255,0.2)" stroke-width="2.5" stroke-linecap="round"/>
+                 <circle cx="16" cy="55" r="3.5" fill="#f87171" opacity="0.6"/>
+                 <line x1="16" y1="36" x2="16" y2="52" stroke="#f87171" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
                </svg>
             </div>
-            <div class="splash-title">Cirrus</div>
+            <div class="splash-title">Clim8</div>
             <div class="splash-dots">
                <span class="splash-dot"></span>
                <span class="splash-dot"></span>
@@ -707,7 +717,7 @@ class App {
               <ion-icon name="cloudy-night" class="text-2xl text-white"></ion-icon>
             </div>
             <div>
-              <div class="text-base font-bold text-white">Cirrus</div>
+              <div class="text-base font-bold text-white">Clim8</div>
               <div class="text-xs text-white/60">Your personal forecast</div>
             </div>
             <button id="btn-close-menu" class="ml-auto p-2 text-white/70 hover:text-white transition rounded-full hover:bg-white/10">
@@ -998,7 +1008,7 @@ class App {
                  <div class="w-16 h-16 card-light mx-auto mb-4 rounded-2xl flex items-center justify-center">
                     <ion-icon name="cloudy-night" class="text-3xl text-white"></ion-icon>
                  </div>
-                 <h4 class="text-lg font-bold text-white mb-1">Cirrus</h4>
+                 <h4 class="text-lg font-bold text-white mb-1">Clim8</h4>
                  <div class="text-white/70 text-sm">Version 3.0.0</div>
                  <div class="text-white/50 text-xs mt-4">Designed with ❤️ using Ionic & Tailwind</div>
             </div>

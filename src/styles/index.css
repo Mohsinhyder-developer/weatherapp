@@ -14,7 +14,7 @@
    ============================================ */
 
 :root {
-  --app-color: #31255a;
+  --app-color: #0f172a;
   --glass-bg: rgba(255, 255, 255, 0.12);
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-blur: 20px;
@@ -59,7 +59,7 @@
 
 /* --- Twilight (Purple Dusk) --- */
 .theme-twilight {
-  --app-color: #31255a;
+  --app-color: #0f172a;
   --glass-bg: rgba(255, 255, 255, 0.12);
   --glass-border: rgba(255, 255, 255, 0.22);
 }
@@ -67,7 +67,7 @@
 .app-background-el.bg-twilight {
   background: linear-gradient(170deg, 
     #1a1040 0%, 
-    #31255a 20%, 
+    #0f172a 20%, 
     #4a3580 40%, 
     #5d3f99 55%, 
     #3d2870 75%, 

@@ -1,44 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e1150;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#3b1f8e;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e3a5f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="cloud1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="eight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7dd3fc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cloud" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
-      <stop offset="100%" style="stop-color:#c4b5fd;stop-opacity:0.85" />
+      <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:0.8" />
     </linearGradient>
-    <linearGradient id="cloud2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#e0e7ff;stop-opacity:0.7" />
-      <stop offset="100%" style="stop-color:#a5b4fc;stop-opacity:0.5" />
-    </linearGradient>
-    <filter id="soft">
-      <feGaussianBlur stdDeviation="0.8" result="blur"/>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="0.6" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
   <!-- Background -->
   <rect width="64" height="64" rx="16" fill="url(#bg)"/>
-  <!-- Subtle star accents -->
-  <circle cx="12" cy="12" r="1" fill="white" opacity="0.4"/>
-  <circle cx="52" cy="10" r="0.8" fill="white" opacity="0.3"/>
-  <circle cx="8" cy="28" r="0.6" fill="white" opacity="0.25"/>
-  <circle cx="56" cy="22" r="0.7" fill="white" opacity="0.3"/>
-  <!-- Back wispy cirrus cloud (thin, high-altitude) -->
-  <ellipse cx="36" cy="22" rx="18" ry="3.5" fill="url(#cloud2)" filter="url(#soft)" transform="rotate(-5, 36, 22)"/>
-  <ellipse cx="26" cy="19" rx="12" ry="2.5" fill="url(#cloud2)" opacity="0.5" transform="rotate(-8, 26, 19)"/>
-  <!-- Main cirrus cloud -->
-  <ellipse cx="32" cy="30" rx="20" ry="7" fill="url(#cloud1)" filter="url(#glow)"/>
-  <ellipse cx="24" cy="33" rx="14" ry="6" fill="url(#cloud1)" opacity="0.9"/>
-  <ellipse cx="40" cy="32" rx="13" ry="5.5" fill="white" opacity="0.85"/>
-  <ellipse cx="30" cy="28" rx="10" ry="4" fill="white" opacity="0.9"/>
-  <!-- Wispy tail -->
-  <ellipse cx="48" cy="35" rx="8" ry="2.5" fill="url(#cloud2)" opacity="0.6" transform="rotate(5, 48, 35)"/>
-  <!-- "C" letter subtly embedded -->
-  <text x="32" y="48" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="14" fill="white" opacity="0.9" letter-spacing="1">C</text>
+  <!-- Subtle atmosphere arcs -->
+  <circle cx="32" cy="64" r="50" fill="none" stroke="rgba(56,189,248,0.08)" stroke-width="1"/>
+  <circle cx="32" cy="64" r="42" fill="none" stroke="rgba(56,189,248,0.06)" stroke-width="0.8"/>
+  <!-- Small cloud accent behind the 8 -->
+  <ellipse cx="38" cy="24" rx="14" ry="5" fill="url(#cloud)" opacity="0.35" filter="url(#softglow)"/>
+  <ellipse cx="24" cy="22" rx="10" ry="3.5" fill="url(#cloud)" opacity="0.25"/>
+  <!-- Big bold "8" — the hero element -->
+  <text x="32" y="48" text-anchor="middle" font-family="'Inter','SF Pro Display',system-ui,sans-serif" font-weight="900" font-size="40" fill="url(#eight)" filter="url(#glow)" letter-spacing="-2">8</text>
+  <!-- Small thermometer accent on left of 8 -->
+  <line x1="13" y1="20" x2="13" y2="44" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="13" cy="46" r="3" fill="#f87171" opacity="0.7"/>
+  <line x1="13" y1="30" x2="13" y2="44" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+  <!-- Temperature tick marks -->
+  <line x1="11" y1="24" x2="15" y2="24" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+  <line x1="11" y1="30" x2="15" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+  <line x1="11" y1="36" x2="15" y2="36" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+  <!-- Small sun accent top-right -->
+  <circle cx="52" cy="14" r="4" fill="#fbbf24" opacity="0.6"/>
+  <g stroke="#fbbf24" stroke-width="0.8" opacity="0.4">
+    <line x1="52" y1="7" x2="52" y2="9"/>
+    <line x1="52" y1="19" x2="52" y2="21"/>
+    <line x1="45" y1="14" x2="47" y2="14"/>
+    <line x1="57" y1="14" x2="59" y2="14"/>
+    <line x1="47" y1="9" x2="48.5" y2="10.5"/>
+    <line x1="55.5" y1="17.5" x2="57" y2="19"/>
+    <line x1="47" y1="19" x2="48.5" y2="17.5"/>
+    <line x1="55.5" y1="10.5" x2="57" y2="9"/>
+  </g>
 </svg>

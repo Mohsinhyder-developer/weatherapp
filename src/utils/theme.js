@@ -10,7 +10,7 @@ export const THEMES = {
     twilight: {
         name: 'Twilight',
         icon: '🌆',
-        metaColor: '#31255a',
+        metaColor: '#0f172a',
         bgClass: 'theme-twilight',
         description: 'Purple dusk gradient',
     },
@@ -38,7 +38,7 @@ export const THEMES = {
     auto: {
         name: 'Auto (Time-based)',
         icon: '🕐',
-        metaColor: '#31255a',
+        metaColor: '#0f172a',
         bgClass: '',
         description: 'Changes with time of day',
     },

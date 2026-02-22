@@ -1,4 +1,4 @@
-# robots.txt for Cirrus
+# robots.txt for Clim8
 # https://weatherapp-puce-eta.vercel.app/
 
 User-agent: *

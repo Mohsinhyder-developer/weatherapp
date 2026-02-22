@@ -199,7 +199,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- ─── Icons & Manifest ─── -->
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
   <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
   <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
@@ -208,15 +208,137 @@
   <style>
     /* Prevent browser pull-to-refresh globally */
     html, body { overscroll-behavior: none; overscroll-behavior-y: none; }
+
+    /* ─── Splash / Loading Screen (inline for instant display) ─── */
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #1a0e3e 0%, #2d1b69 40%, #1e1150 70%, #0a0620 100%);
+      z-index: 99999;
+    }
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .splash-icon-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .splash-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+    .splash-ring-1 {
+      border-top-color: rgba(251, 191, 36, 0.8);
+      border-right-color: rgba(251, 191, 36, 0.3);
+      animation: splashSpin 1.8s linear infinite;
+    }
+    .splash-ring-2 {
+      inset: 8px;
+      border-bottom-color: rgba(147, 197, 253, 0.7);
+      border-left-color: rgba(147, 197, 253, 0.3);
+      animation: splashSpin 2.4s linear infinite reverse;
+    }
+    .splash-ring-3 {
+      inset: 16px;
+      border-top-color: rgba(255, 255, 255, 0.4);
+      animation: splashSpin 3s linear infinite;
+    }
+    .splash-weather-svg {
+      width: 56px;
+      height: 56px;
+      animation: splashFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.3));
+    }
+    .splash-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(99, 102, 241, 0.4);
+    }
+    .splash-subtitle {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+    .splash-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .splash-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(251, 191, 36, 0.7);
+      animation: splashBounce 1.4s ease-in-out infinite;
+    }
+    .splash-dot:nth-child(2) { animation-delay: 0.15s; }
+    .splash-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes splashSpin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes splashFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes splashBounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1.1); opacity: 1; }
+    }
   </style>
 </head>
 
 <body>
   <!-- ─── SEO: Hidden content for crawlers ─── -->
+  <h1 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">Weather App – Real-Time Weather Forecast, Hourly & 7-Day Predictions</h1>
   <noscript>
-    <h1>Weather App – Real-Time Weather Forecast</h1>
+    <h2>Weather App – Real-Time Weather Forecast</h2>
     <p>Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index, sunrise & sunset times. Free weather app with offline support, beautiful animations & multi-city tracking.</p>
-    <p>Features: Real-time weather, Hourly forecast, 7-day predictions, Air quality index, UV index, Sunrise & sunset, Multi-city tracking, Offline support, Weather animations, Weather alerts.</p>
+    <h3>Features</h3>
+    <ul>
+      <li>Real-time weather updates for any city worldwide</li>
+      <li>Hourly weather forecast with precipitation chances</li>
+      <li>7-day weather predictions with temperature ranges</li>
+      <li>Air quality index (AQI) monitoring</li>
+      <li>UV index tracking with sun protection advice</li>
+      <li>Sunrise and sunset times with sun arc visualization</li>
+      <li>Multi-city weather tracking</li>
+      <li>Offline support — works without internet (PWA)</li>
+      <li>Beautiful weather animations and themes</li>
+      <li>Wind speed, humidity, pressure, and visibility data</li>
+      <li>Moon phase tracker with illumination percentage</li>
+      <li>Weather comparison with yesterday</li>
+    </ul>
+    <h3>Frequently Asked Questions</h3>
+    <dl>
+      <dt>What is Weather App?</dt>
+      <dd>A free, modern weather application providing real-time forecasts, hourly updates, and 7-day predictions with beautiful animations.</dd>
+      <dt>Does it work offline?</dt>
+      <dd>Yes! As a Progressive Web App (PWA), it caches weather data for offline access.</dd>
+      <dt>How accurate are the forecasts?</dt>
+      <dd>We use reliable weather data sources for accurate temperature, humidity, wind, and precipitation information.</dd>
+    </dl>
   </noscript>
 
   <ion-app>

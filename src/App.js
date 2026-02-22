@@ -603,18 +603,35 @@ class App {
   }
 
   async init() {
-    // Show simple loading state to prevent flash of auth
+    // Show beautiful loading animation
     document.getElementById('app').innerHTML = `
-      <div class="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative">
+      <div class="splash-screen">
          <div id="app-background" class="app-background-el"></div>
-         <div class="relative z-10 flex flex-col items-center text-app">
-            <div class="w-20 h-20 mb-6 relative">
-               <div class="absolute inset-0 border-4 border-white/20 rounded-full animate-ping"></div>
-               <div class="absolute inset-0 border-4 border-white/80 border-t-transparent rounded-full animate-spin"></div>
-               <ion-icon name="cloudy-night" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-white"></ion-icon>
+         <div class="splash-content">
+            <div class="splash-icon-wrap">
+               <div class="splash-ring splash-ring-1"></div>
+               <div class="splash-ring splash-ring-2"></div>
+               <div class="splash-ring splash-ring-3"></div>
+               <svg class="splash-weather-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <circle cx="36" cy="40" r="14" fill="#fbbf24" opacity="0.9"/>
+                 <circle cx="36" cy="40" r="18" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity="0.3"/>
+                 <line x1="36" y1="16" x2="36" y2="12" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                 <line x1="36" y1="68" x2="36" y2="64" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                 <line x1="12" y1="40" x2="16" y2="40" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                 <line x1="56" y1="40" x2="60" y2="40" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                 <circle cx="52" cy="38" r="11" fill="rgba(255,255,255,0.95)"/>
+                 <circle cx="44" cy="42" r="9" fill="rgba(255,255,255,0.95)"/>
+                 <circle cx="56" cy="44" r="8" fill="rgba(255,255,255,0.9)"/>
+                 <circle cx="48" cy="36" r="7" fill="rgba(255,255,255,0.9)"/>
+               </svg>
             </div>
-            <div class="text-xl font-bold tracking-widest uppercase animate-pulse text-white">Weather App</div>
-            <div class="text-xs text-white/60 mt-2 tracking-wide">Loading your forecast...</div>
+            <div class="splash-title">Weather App</div>
+            <div class="splash-dots">
+               <span class="splash-dot"></span>
+               <span class="splash-dot"></span>
+               <span class="splash-dot"></span>
+            </div>
+            <div class="splash-subtitle">Fetching your forecast...</div>
          </div>
       </div>
     `;
@@ -1713,8 +1730,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
       }
     }
 
-    // ──── ACTIVITIES ────
-    const activities = this.getActivitySuggestions(current);
+
 
     // ──── DYNAMIC FAVICON ────
     this.updateFavicon(current.icon);
@@ -1781,19 +1797,7 @@ data-lat="${city.lat}" data-lon="${city.lon}">
           </div>
         </section>
 
-        <!-- ★ ACTIVITY SUGGESTIONS ★ -->
-        ${activities.length ? `
-        <section class="card-light p-4 fade-in" style="animation-delay:0.47s">
-          <h2 class="section-label">Today's Activities</h2>
-          <div class="activity-suggestions">
-            ${activities.map(a => `
-              <div class="activity-chip">
-                <span class="activity-emoji">${a.emoji}</span>
-                <span class="activity-text">${a.text}</span>
-              </div>
-            `).join('')}
-          </div>
-        </section>` : ''}
+
 
         <!-- ★ PRECIPITATION TIMELINE ★ -->
         <section class="card-light p-4 fade-in" style="animation-delay:0.48s">

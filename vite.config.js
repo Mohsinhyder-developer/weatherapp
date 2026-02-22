@@ -10,12 +10,12 @@ export default defineConfig({
                 enabled: true,
                 type: 'module', // Fixes MIME type issue in dev
             },
-            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+            includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'robots.txt', 'sitemap.xml'],
             manifest: {
-                name: 'Advanced Weather App',
-                short_name: 'Weather',
-                description: 'Advanced weather application with offline support',
-                theme_color: '#ffffff',
+                name: 'Weather App – Real-Time Weather Forecast',
+                short_name: 'Weather App',
+                description: 'Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index & more. Free, fast & works offline.',
+                theme_color: '#31255a',
                 // background_color and display removed as per instruction
                 icons: [
                     {

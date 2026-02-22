@@ -403,12 +403,6 @@ ion-toolbar .header-btn:active {
   ion-page#main-page {
     max-width: 100%;
   }
-  /* Desktop toolbar gets a subtle glass background */
-  ion-toolbar {
-    --background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
 }
 
 /* Background is now managed by .app-background-el class */
@@ -992,6 +986,11 @@ ion-segment-button {
   .slider-nav {
     bottom: 60px;
   }
+
+  /* Tablet Grids */
+  .grid-cols-2 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1001,6 +1000,10 @@ ion-segment-button {
 
   .section-content {
     padding: 4rem 6rem;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }
 
@@ -1012,8 +1015,15 @@ ion-segment-button {
 
 @media (min-width: 640px) {
   #hero-weather {
-    min-height: 300px;
+    min-height: 320px;
     padding: 1.5rem 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #hero-weather {
+    min-height: 360px;
+    padding: 2rem 2.5rem;
   }
 }
 
@@ -1143,9 +1153,9 @@ ion-toolbar {
   flex-shrink: 0;
   padding: 6px 4px;
   border-radius: 14px;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease;
 }
-.hourly-item:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+.hourly-item:hover { background: rgba(255,255,255,0.08); }
 
 .hourly-time {
   font-size: 0.65rem;
@@ -1920,6 +1930,37 @@ ion-toolbar {
 }
 
 /* ============================================
+   ACTIVITY SUGGESTIONS
+   ============================================ */
+.activity-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.activity-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+.activity-chip:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-1px);
+}
+.activity-emoji {
+  font-size: 1.1rem;
+}
+.activity-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ============================================
    WEATHER COMPARISON (vs. Yesterday)
    ============================================ */
 .comparison-card {
@@ -2437,41 +2478,34 @@ body.high-contrast .comparison-item {
 .pressure-steady { color: rgba(255,255,255,0.5); }
 
 /* ============================================
-   DESKTOP GRID LAYOUT — Modern Card Dashboard
+   DESKTOP 2-COLUMN GRID LAYOUT
    ============================================ */
-
-/* Tablet: 2-column grid */
 @media (min-width: 768px) {
-  .single-page-inner {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 2rem 3rem;
-  }
-
   .desktop-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
-
-  /* Full-width items: hourly, daily, metrics */
-  .desktop-grid > .desktop-full {
+  /* Full-width sections: multi-city, comparison, hourly, 7-day */
+  .desktop-grid > section:first-child,
+  .desktop-grid > section:nth-child(2),
+  .desktop-grid > section:nth-child(3),
+  .desktop-grid > section:nth-child(5),
+  .desktop-grid > section:nth-child(6) {
     grid-column: 1 / -1;
   }
-
-  /* Regular cards sit in 2-col cells */
-  .desktop-grid > .desktop-card {
-    grid-column: span 1;
-  }
-
-  /* Metrics grid spans full */
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
+  .single-page-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
 
-  /* Hero section improvements */
-  #hero-weather {
-    min-height: 300px;
+  /* Hero section — bigger on desktop */
+  .hero-section {
+    padding: 3rem 2rem 3.5rem;
   }
   .hero-temp {
     font-size: 7rem;
@@ -2481,180 +2515,142 @@ body.high-contrast .comparison-item {
     height: 120px;
   }
 
-  /* Better card appearance on desktop */
-  .card-light {
-    border-radius: 24px;
-    padding: 20px;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
-                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.25s ease;
-  }
-  .card-light:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+  /* Cards get more breathing room */
+  .card-light,
+  .ios-card {
+    padding: 20px 24px;
   }
 
-  /* Metric cards enhanced */
+  /* Metric cards bigger */
   .metric-card {
-    border-radius: 20px;
     padding: 18px 14px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .metric-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  .metric-value {
+    font-size: 1.4rem;
+  }
+
+  /* Details grid — 3 columns on tablet */
+  .details-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Hourly items more spacious */
+  .hourly-item {
+    min-width: 90px;
+    padding: 14px 12px;
+  }
+  .hourly-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Daily rows more spacious */
+  .daily-row-expandable {
+    padding: 14px 8px;
+  }
+
+  /* Wind compass bigger */
+  .wind-compass-card {
+    gap: 24px;
+  }
+  .wind-compass-speed {
+    font-size: 2rem;
   }
 }
 
-/* Desktop: wider layout */
-@media (min-width: 1024px) {
-  .single-page-inner {
-    max-width: 1080px;
-    padding: 0 2.5rem 3rem;
-  }
-
+@media (min-width: 1200px) {
   .desktop-grid {
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 18px;
   }
-
-  #hero-weather {
-    min-height: 340px;
-    padding: 2.5rem 3rem;
-  }
-  .hero-temp {
-    font-size: 8rem;
-  }
-}
-
-/* Large Desktop: 3-column for smaller widgets */
-@media (min-width: 1280px) {
-  .single-page-inner {
-    max-width: 1240px;
-    padding: 0 3rem 3rem;
-  }
-
-  .desktop-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  /* Full-width items span all 3 cols */
-  .desktop-grid > .desktop-full {
+  /* Full-width items on large screens */
+  .desktop-grid > section:first-child,
+  .desktop-grid > section:nth-child(2),
+  .desktop-grid > section:nth-child(3),
+  .desktop-grid > section:nth-child(5),
+  .desktop-grid > section:nth-child(6) {
     grid-column: 1 / -1;
   }
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
+  .single-page-inner {
+    max-width: 1280px;
+    padding: 0 3rem 2rem;
+  }
 
-  /* Regular cards fill 3-col grid */
-  .desktop-grid > .desktop-card {
-    grid-column: span 1;
+  /* Hero — even bigger on large desktop */
+  .hero-section {
+    padding: 4rem 2rem 4.5rem;
+  }
+  .hero-temp {
+    font-size: 8rem;
+  }
+  .hero-weather-icon {
+    width: 140px;
+    height: 140px;
+  }
+
+  /* 4-column metrics grid */
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  /* Cards — polished look */
+  .card-light,
+  .ios-card {
+    padding: 24px 28px;
+    border-radius: 24px;
+  }
+
+  /* Bigger charts */
+  .chart-container {
+    height: 220px;
   }
 }
 
 /* ============================================
-   DESKTOP-SPECIFIC COMPONENT ENHANCEMENTS
+   DESKTOP — Extra polish & hover effects
    ============================================ */
-
-/* Hourly items spread nicely on desktop */
 @media (min-width: 768px) {
-  .hourly-scroll {
-    gap: 6px;
-    padding: 4px 0;
+  /* Card hover lift effect */
+  .card-light,
+  .ios-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .hourly-item {
-    min-width: 72px;
-    padding: 10px 8px;
-    border-radius: 16px;
-  }
-  .hourly-item:hover {
-    background: rgba(255,255,255,0.1);
-  }
-  .hourly-icon {
-    width: 52px;
-    height: 52px;
-  }
-  .hourly-temp {
-    font-size: 1rem;
+  .card-light:hover,
+  .ios-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   }
 
-  /* Daily forecast rows breathe more on desktop */
-  .daily-row-expandable {
-    padding: 12px 8px;
-    border-radius: 14px;
-  }
-  .daily-icon-img {
-    width: 46px;
-    height: 46px;
-  }
-  .daily-day {
-    width: 56px;
-    font-size: 0.95rem;
-  }
-  .daily-temp-range {
-    min-width: 130px;
-  }
-
-  /* Wind compass bigger on desktop */
-  .wind-compass-card {
-    gap: 28px;
-    padding: 4px 0;
-  }
-  .wind-compass-speed {
-    font-size: 2rem;
-  }
-
-  /* UV gauge centered better */
-  .uv-gauge-card {
-    padding: 8px 0;
-  }
-
-  /* Moon phase card */
-  .moon-phase-card {
-    gap: 24px;
-  }
-  .moon-phase-name {
-    font-size: 1.2rem;
-  }
-
-  /* AQI components grid */
-  .aqi-components {
-    gap: 8px;
-  }
-  .aqi-comp {
-    min-width: 60px;
-    padding: 10px 8px;
-    border-radius: 14px;
-  }
-
-  /* Section labels slightly larger */
-  .section-label {
-    font-size: 0.74rem;
-    letter-spacing: 0.16em;
-  }
-}
-
-/* Large desktop: wider metric cards */
-@media (min-width: 1024px) {
-  .hourly-item {
-    min-width: 78px;
-    padding: 12px 10px;
-  }
-  .hourly-icon {
-    width: 56px;
-    height: 56px;
-  }
+  /* Metric cards hover glow */
   .metric-card {
-    padding: 20px 16px;
+    transition: transform 0.2s ease, background 0.2s ease;
   }
-  .metric-value {
-    font-size: 1.2rem;
+  .metric-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    background: rgba(255, 255, 255, 0.14);
   }
-  .metric-icon-img {
-    width: 36px;
-    height: 36px;
+
+  /* Section labels bigger */
+  .section-label {
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+  }
+
+  /* Smoother scrollbar for desktop */
+  .single-page-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .single-page-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .single-page-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+  }
+  .single-page-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
   }
 }

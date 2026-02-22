@@ -1,7 +1,7 @@
 {
-    "name": "Weather App – Real-Time Weather Forecast, Hourly & 7-Day Predictions",
-    "short_name": "Weather App",
-    "description": "Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index, sunrise & sunset times. Free weather app with offline support, beautiful animations & multi-city tracking.",
+    "name": "Cirrus – Real-Time Weather Forecast, Hourly & 7-Day Predictions",
+    "short_name": "Cirrus",
+    "description": "Cirrus — Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index, sunrise & sunset times. Free weather app with offline support, beautiful animations & multi-city tracking.",
     "start_url": "/",
     "id": "/",
     "scope": "/",

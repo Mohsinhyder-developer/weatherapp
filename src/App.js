@@ -613,19 +613,21 @@ class App {
                <div class="splash-ring splash-ring-2"></div>
                <div class="splash-ring splash-ring-3"></div>
                <svg class="splash-weather-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <circle cx="36" cy="40" r="14" fill="#fbbf24" opacity="0.9"/>
-                 <circle cx="36" cy="40" r="18" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity="0.3"/>
-                 <line x1="36" y1="16" x2="36" y2="12" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                 <line x1="36" y1="68" x2="36" y2="64" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                 <line x1="12" y1="40" x2="16" y2="40" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                 <line x1="56" y1="40" x2="60" y2="40" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                 <circle cx="52" cy="38" r="11" fill="rgba(255,255,255,0.95)"/>
-                 <circle cx="44" cy="42" r="9" fill="rgba(255,255,255,0.95)"/>
-                 <circle cx="56" cy="44" r="8" fill="rgba(255,255,255,0.9)"/>
-                 <circle cx="48" cy="36" r="7" fill="rgba(255,255,255,0.9)"/>
+                 <defs>
+                   <linearGradient id="sc1" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
+                     <stop offset="100%" style="stop-color:#c4b5fd;stop-opacity:0.8" />
+                   </linearGradient>
+                 </defs>
+                 <ellipse cx="40" cy="34" rx="24" ry="9" fill="url(#sc1)" opacity="0.9"/>
+                 <ellipse cx="30" cy="38" rx="18" ry="7.5" fill="url(#sc1)" opacity="0.85"/>
+                 <ellipse cx="50" cy="37" rx="16" ry="7" fill="white" opacity="0.8"/>
+                 <ellipse cx="38" cy="31" rx="14" ry="5" fill="white" opacity="0.9"/>
+                 <ellipse cx="55" cy="40" rx="10" ry="3.5" fill="rgba(196,181,253,0.5)" transform="rotate(5,55,40)"/>
+                 <text x="40" y="58" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="16" fill="white" opacity="0.85" letter-spacing="2">C</text>
                </svg>
             </div>
-            <div class="splash-title">Weather App</div>
+            <div class="splash-title">Cirrus</div>
             <div class="splash-dots">
                <span class="splash-dot"></span>
                <span class="splash-dot"></span>
@@ -705,7 +707,7 @@ class App {
               <ion-icon name="cloudy-night" class="text-2xl text-white"></ion-icon>
             </div>
             <div>
-              <div class="text-base font-bold text-white">Weather App</div>
+              <div class="text-base font-bold text-white">Cirrus</div>
               <div class="text-xs text-white/60">Your personal forecast</div>
             </div>
             <button id="btn-close-menu" class="ml-auto p-2 text-white/70 hover:text-white transition rounded-full hover:bg-white/10">
@@ -996,7 +998,7 @@ class App {
                  <div class="w-16 h-16 card-light mx-auto mb-4 rounded-2xl flex items-center justify-center">
                     <ion-icon name="cloudy-night" class="text-3xl text-white"></ion-icon>
                  </div>
-                 <h4 class="text-lg font-bold text-white mb-1">Weather App</h4>
+                 <h4 class="text-lg font-bold text-white mb-1">Cirrus</h4>
                  <div class="text-white/70 text-sm">Version 3.0.0</div>
                  <div class="text-white/50 text-xs mt-4">Designed with ❤️ using Ionic & Tailwind</div>
             </div>

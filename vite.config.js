@@ -12,8 +12,8 @@ export default defineConfig({
             },
             includeAssets: ['favicon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'robots.txt', 'sitemap.xml'],
             manifest: {
-                name: 'Weather App – Real-Time Weather Forecast',
-                short_name: 'Weather App',
+                name: 'Cirrus – Real-Time Weather Forecast',
+                short_name: 'Cirrus',
                 description: 'Get accurate real-time weather forecasts, hourly updates, 7-day predictions, air quality index, UV index & more. Free, fast & works offline.',
                 theme_color: '#31255a',
                 // background_color and display removed as per instruction

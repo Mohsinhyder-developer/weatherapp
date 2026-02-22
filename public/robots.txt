@@ -1,4 +1,4 @@
-# robots.txt for Weather App
+# robots.txt for Cirrus
 # https://weatherapp-puce-eta.vercel.app/
 
 User-agent: *

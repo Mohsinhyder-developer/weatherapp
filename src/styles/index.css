@@ -315,15 +315,23 @@ ion-page#main-page {
   /* Center toolbar content to match inner content width */
   ion-toolbar .toolbar-container,
   ion-toolbar {
-    max-width: 1080px;
+    max-width: 95vw;
     margin: 0 auto;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   ion-toolbar .toolbar-container,
   ion-toolbar {
-    max-width: 1320px;
+    max-width: 92vw;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1400px) {
+  ion-toolbar .toolbar-container,
+  ion-toolbar {
+    max-width: 1360px;
     margin: 0 auto;
   }
 }
@@ -349,21 +357,31 @@ ion-page#main-page {
 
 @media (min-width: 640px) {
   .single-page-inner {
-    padding: 0 1.5rem 2rem;
+    padding: 0 1.25rem 2rem;
+    gap: 10px;
   }
 }
 
 @media (min-width: 768px) {
   .single-page-inner {
-    max-width: 900px;
+    max-width: 95vw;
     padding: 0 2rem 2rem;
+    gap: 14px;
   }
 }
 
 @media (min-width: 1024px) {
   .single-page-inner {
-    max-width: 1080px;
+    max-width: 92vw;
     padding: 0 2.5rem 2rem;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .single-page-inner {
+    max-width: 1360px;
+    padding: 0 3rem 2rem;
   }
 }
 
@@ -373,6 +391,19 @@ ion-page#main-page {
   min-height: auto;
   padding-top: 0.25rem;
   padding-bottom: 0.5rem;
+}
+
+/* Hero becomes a glass card on desktop */
+@media (min-width: 768px) {
+  .hero-compact,
+  #hero-weather {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
 }
 
 .single-page-details {
@@ -2525,9 +2556,8 @@ body.high-contrast .comparison-item {
   .desktop-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 14px;
   }
-  /* Full-width sections use data attribute instead of fragile nth-child */
   .desktop-grid > [data-desktop="full"] {
     grid-column: 1 / -1;
   }
@@ -2552,15 +2582,15 @@ body.high-contrast .comparison-item {
   /* Cards get more breathing room */
   .desktop-grid .card-light,
   .desktop-grid .ios-card {
-    padding: 20px 24px;
+    padding: 20px 22px;
   }
 
   /* Metric cards bigger */
   .metric-card {
-    padding: 18px 14px;
+    padding: 16px 12px;
   }
   .metric-value {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
   /* Details grid — 3 columns on tablet */
@@ -2570,8 +2600,8 @@ body.high-contrast .comparison-item {
 
   /* Hourly items more spacious */
   .hourly-item {
-    min-width: 80px;
-    padding: 12px 10px;
+    min-width: 76px;
+    padding: 10px 8px;
   }
   .hourly-icon {
     width: 36px;
@@ -2580,12 +2610,12 @@ body.high-contrast .comparison-item {
 
   /* Daily rows more spacious */
   .daily-row-expandable {
-    padding: 14px 8px;
+    padding: 12px 8px;
   }
 
   /* Wind compass bigger */
   .wind-compass-card {
-    gap: 24px;
+    gap: 20px;
   }
   .wind-compass-speed {
     font-size: 1.8rem;
@@ -2595,7 +2625,7 @@ body.high-contrast .comparison-item {
 @media (min-width: 1024px) {
   .desktop-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 16px;
   }
   .desktop-grid > [data-desktop="full"] {
     grid-column: 1 / -1;
@@ -2610,35 +2640,32 @@ body.high-contrast .comparison-item {
   .hero-section {
     padding: 3rem 2rem 3.5rem;
   }
-  .hero-temp {
-    font-size: 7rem;
-  }
   .hero-weather-icon {
     width: 120px;
     height: 120px;
   }
-  .hero-city {
-    font-size: 2rem;
-  }
   .hero-desc {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
   /* Cards — more comfortable */
   .desktop-grid .card-light,
   .desktop-grid .ios-card {
     padding: 22px 26px;
-    border-radius: 24px;
+    border-radius: 22px;
   }
 
   .metric-value {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
+  }
+  .metric-label {
+    font-size: 0.65rem;
   }
 
   /* Hourly items */
   .hourly-item {
-    min-width: 90px;
-    padding: 14px 12px;
+    min-width: 84px;
+    padding: 12px 10px;
   }
   .hourly-icon {
     width: 40px;
@@ -2662,32 +2689,24 @@ body.high-contrast .comparison-item {
 @media (min-width: 1200px) {
   .desktop-grid {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+    gap: 18px;
   }
-  /* Full-width items on large screens */
   .desktop-grid > [data-desktop="full"] {
     grid-column: 1 / -1;
   }
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
-  .single-page-inner {
-    max-width: 1320px;
-    padding: 0 3rem 2rem;
-  }
 
   /* Hero — even bigger on large desktop */
   #hero-weather,
   .hero-compact,
   .hero-section {
-    padding: 4rem 2rem 4.5rem;
-  }
-  .hero-temp {
-    font-size: 8rem;
+    padding: 3.5rem 2rem 4rem;
   }
   .hero-weather-icon {
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
   }
 
   /* 4-column metrics grid */
@@ -2702,26 +2721,37 @@ body.high-contrast .comparison-item {
     border-radius: 24px;
   }
 
+  .metric-card {
+    padding: 20px 16px;
+  }
+  .metric-value {
+    font-size: 1.45rem;
+  }
+
   /* Bigger charts */
   .chart-container {
     height: 220px;
+  }
+
+  /* Hourly items bigger */
+  .hourly-item {
+    min-width: 92px;
+    padding: 14px 12px;
   }
 }
 
 /* Extra large screens (1440px+) */
 @media (min-width: 1440px) {
-  .single-page-inner {
-    max-width: 1400px;
-  }
   .desktop-grid {
-    gap: 22px;
+    gap: 20px;
   }
   .desktop-grid .card-light,
   .desktop-grid .ios-card {
     padding: 26px 32px;
   }
-  .hero-temp {
-    font-size: 8.5rem;
+  .hero-weather-icon {
+    width: 140px;
+    height: 140px;
   }
 }
 

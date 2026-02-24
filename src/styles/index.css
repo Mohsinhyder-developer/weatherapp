@@ -344,6 +344,27 @@ ion-page#main-page {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .single-page-inner {
+    padding: 0 1.5rem 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .single-page-inner {
+    max-width: 900px;
+    padding: 0 2rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .single-page-inner {
+    max-width: 1080px;
+    padding: 0 2.5rem 2rem;
+  }
 }
 
 /* Sunrise/sunset row: make it stand out so it’s not hidden */
@@ -496,7 +517,7 @@ ion-toolbar .header-btn:active {
 
 .hero-city {
   font-family: 'Inter', sans-serif;
-  font-size: 1.8rem;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -504,7 +525,7 @@ ion-toolbar .header-btn:active {
 
 .hero-temp {
   font-family: 'Inter', sans-serif;
-  font-size: 5.5rem;
+  font-size: clamp(4.5rem, 10vw, 8rem);
   font-weight: 200;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -547,6 +568,14 @@ ion-toolbar .header-btn:active {
 @media (min-width: 640px) {
   .details-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .details-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
 }
 
@@ -1061,6 +1090,20 @@ ion-toolbar {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  #header-location {
+    max-width: 50vw;
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  #header-location {
+    max-width: 40vw;
+    font-size: 1rem;
+  }
 }
 
 /* Settings overlay: desktop centered modal */
@@ -2491,27 +2534,22 @@ body.high-contrast .comparison-item {
   .desktop-grid > .grid {
     grid-column: 1 / -1;
   }
-  .single-page-inner {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 2rem 2rem;
-  }
 
-  /* Hero section — bigger on desktop */
+  /* Hero section — bigger on tablet */
   #hero-weather,
   .hero-compact,
   .hero-section {
-    padding: 3rem 2rem 3.5rem;
+    padding: 2.5rem 2rem 3rem;
   }
   .hero-temp {
-    font-size: 7rem;
+    font-size: 6rem;
   }
   .hero-weather-icon {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
   }
 
-  /* Cards get more breathing room — use higher specificity to beat Tailwind */
+  /* Cards get more breathing room */
   .desktop-grid .card-light,
   .desktop-grid .ios-card {
     padding: 20px 24px;
@@ -2522,7 +2560,7 @@ body.high-contrast .comparison-item {
     padding: 18px 14px;
   }
   .metric-value {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   /* Details grid — 3 columns on tablet */
@@ -2532,12 +2570,12 @@ body.high-contrast .comparison-item {
 
   /* Hourly items more spacious */
   .hourly-item {
-    min-width: 90px;
-    padding: 14px 12px;
+    min-width: 80px;
+    padding: 12px 10px;
   }
   .hourly-icon {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
   }
 
   /* Daily rows more spacious */
@@ -2550,14 +2588,81 @@ body.high-contrast .comparison-item {
     gap: 24px;
   }
   .wind-compass-speed {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .desktop-grid > [data-desktop="full"] {
+    grid-column: 1 / -1;
+  }
+  .desktop-grid > .grid {
+    grid-column: 1 / -1;
+  }
+
+  /* Hero — refined for laptop screens */
+  #hero-weather,
+  .hero-compact,
+  .hero-section {
+    padding: 3rem 2rem 3.5rem;
+  }
+  .hero-temp {
+    font-size: 7rem;
+  }
+  .hero-weather-icon {
+    width: 120px;
+    height: 120px;
+  }
+  .hero-city {
     font-size: 2rem;
+  }
+  .hero-desc {
+    font-size: 1.3rem;
+  }
+
+  /* Cards — more comfortable */
+  .desktop-grid .card-light,
+  .desktop-grid .ios-card {
+    padding: 22px 26px;
+    border-radius: 24px;
+  }
+
+  .metric-value {
+    font-size: 1.4rem;
+  }
+
+  /* Hourly items */
+  .hourly-item {
+    min-width: 90px;
+    padding: 14px 12px;
+  }
+  .hourly-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .hourly-temp {
+    font-size: 1.05rem;
+  }
+
+  /* Wind compass */
+  .wind-compass-speed {
+    font-size: 2rem;
+  }
+
+  /* Charts */
+  .chart-container {
+    height: 200px;
   }
 }
 
 @media (min-width: 1200px) {
   .desktop-grid {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 18px;
+    gap: 20px;
   }
   /* Full-width items on large screens */
   .desktop-grid > [data-desktop="full"] {
@@ -2603,6 +2708,23 @@ body.high-contrast .comparison-item {
   }
 }
 
+/* Extra large screens (1440px+) */
+@media (min-width: 1440px) {
+  .single-page-inner {
+    max-width: 1400px;
+  }
+  .desktop-grid {
+    gap: 22px;
+  }
+  .desktop-grid .card-light,
+  .desktop-grid .ios-card {
+    padding: 26px 32px;
+  }
+  .hero-temp {
+    font-size: 8.5rem;
+  }
+}
+
 /* ============================================
    DESKTOP — Extra polish & hover effects
    ============================================ */
@@ -2629,7 +2751,7 @@ body.high-contrast .comparison-item {
 
   /* Section labels bigger */
   .section-label {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     letter-spacing: 0.14em;
   }
 
@@ -2646,5 +2768,31 @@ body.high-contrast .comparison-item {
   }
   .single-page-content::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-label {
+    font-size: 0.85rem;
+  }
+
+  /* Larger daily rows text */
+  .daily-day {
+    width: 60px;
+    font-size: 1rem;
+  }
+  .daily-icon-img {
+    width: 48px;
+    height: 48px;
+  }
+  .daily-desc-text {
+    font-size: 0.8rem;
+  }
+  .daily-min,
+  .daily-max {
+    font-size: 1rem;
+  }
+  .daily-temp-range {
+    min-width: 130px;
   }
 }

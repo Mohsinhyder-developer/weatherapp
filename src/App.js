@@ -1873,8 +1873,8 @@ data-lat="${city.lat}" data-lon="${city.lon}">
           </div>
         </section>
 
-        <!-- ★ METRICS GRID — 4 cols with dew point & pressure trend ★ -->
-        <div class="grid grid-cols-4 gap-2 fade-in" data-desktop="full" style="animation-delay:0.7s">
+        <!-- ★ METRICS GRID — 2 cols mobile, 4 cols tablet+ ★ -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 fade-in" data-desktop="full" style="animation-delay:0.7s">
           <div class="metric-card">
             <div class="metric-icon"><img src="${weatherService.getMetricIconUrl('humidity')}" class="metric-icon-img" alt="humidity"></div>
             <div class="metric-label">Humidity</div>
